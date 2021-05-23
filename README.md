@@ -1,16 +1,14 @@
-# login_firebase
+# IT-Management-and-Standards_ITBudgetManagementFlutterApp
+IT Budget Management Mobile and Web Application with Flutter&Dart
 
-A new Flutter application.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Mobil ve Web Uygulamamızın içerdiği fonksiyonaliteler:
+1. Kayıt Ol
+2. Giriş Yap
+3. Çıkış Yap
+4. Bütçe Tanımla ve Ekle (Açıklama + Aylık/Yıllık Miktar)
+a. Gelir Ekle()
+b. Gider Ekle()
+5. Bütçe Kayıtlarını Görüntüle
+6. Bütçe Kayıtlarını Sil
+7. Bütçe Kayıtlarını Düzenle
+8. Bütçe Raporu Al (Kâr/Zarar hesaplaması)
