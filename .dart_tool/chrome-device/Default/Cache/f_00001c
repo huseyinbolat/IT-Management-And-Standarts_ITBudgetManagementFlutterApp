@@ -1,0 +1,2142 @@
+define(['dart_sdk', 'packages/plugin_platform_interface/plugin_platform_interface.dart', 'packages/cloud_firestore_platform_interface/src/set_options.dart', 'packages/cloud_firestore_platform_interface/src/snapshot_metadata.dart', 'packages/cloud_firestore_platform_interface/src/get_options.dart', 'packages/cloud_firestore_platform_interface/src/internal/pointer.dart', 'packages/cloud_firestore_platform_interface/src/field_path.dart', 'packages/collection/src/equality.dart', 'packages/cloud_firestore_platform_interface/src/timestamp.dart', 'packages/cloud_firestore_platform_interface/src/geo_point.dart', 'packages/cloud_firestore_platform_interface/src/blob.dart', 'packages/cloud_firestore_platform_interface/src/platform_interface/platform_interface_field_value.dart', 'packages/cloud_firestore_platform_interface/src/internal/field_path_type.dart', 'packages/cloud_firestore_platform_interface/src/settings.dart', 'packages/firebase_core/firebase_core.dart', 'packages/flutter/src/services/system_channels.dart', 'packages/flutter/src/foundation/serialization.dart', 'packages/cloud_firestore_platform_interface/src/method_channel/utils/exception.dart', 'packages/cloud_firestore_platform_interface/src/method_channel/utils/source.dart', 'packages/cloud_firestore_platform_interface/src/source.dart', 'packages/cloud_firestore_platform_interface/src/method_channel/utils/auto_id_generator.dart', 'packages/firebase_core_platform_interface/firebase_core_platform_interface.dart', 'packages/cloud_firestore_platform_interface/src/persistence_settings.dart'], (function load__packages__cloud_firestore_platform_interface__src__platform_interface__platform_interface_write_batch_dart(dart_sdk, packages__plugin_platform_interface__plugin_platform_interface$46dart, packages__cloud_firestore_platform_interface__src__set_options$46dart, packages__cloud_firestore_platform_interface__src__snapshot_metadata$46dart, packages__cloud_firestore_platform_interface__src__get_options$46dart, packages__cloud_firestore_platform_interface__src__internal__pointer$46dart, packages__cloud_firestore_platform_interface__src__field_path$46dart, packages__collection__src__equality$46dart, packages__cloud_firestore_platform_interface__src__timestamp$46dart, packages__cloud_firestore_platform_interface__src__geo_point$46dart, packages__cloud_firestore_platform_interface__src__blob$46dart, packages__cloud_firestore_platform_interface__src__platform_interface__platform_interface_field_value$46dart, packages__cloud_firestore_platform_interface__src__internal__field_path_type$46dart, packages__cloud_firestore_platform_interface__src__settings$46dart, packages__firebase_core__firebase_core$46dart, packages__flutter__src__services__system_channels$46dart, packages__flutter__src__foundation__serialization$46dart, packages__cloud_firestore_platform_interface__src__method_channel__utils__exception$46dart, packages__cloud_firestore_platform_interface__src__method_channel__utils__source$46dart, packages__cloud_firestore_platform_interface__src__source$46dart, packages__cloud_firestore_platform_interface__src__method_channel__utils__auto_id_generator$46dart, packages__firebase_core_platform_interface__firebase_core_platform_interface$46dart, packages__cloud_firestore_platform_interface__src__persistence_settings$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const async = dart_sdk.async;
+  const _js_helper = dart_sdk._js_helper;
+  const collection = dart_sdk.collection;
+  const ui = dart_sdk.ui;
+  const typed_data = dart_sdk.typed_data;
+  const _interceptors = dart_sdk._interceptors;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const plugin_platform_interface = packages__plugin_platform_interface__plugin_platform_interface$46dart.plugin_platform_interface;
+  const set_options = packages__cloud_firestore_platform_interface__src__set_options$46dart.src__set_options;
+  const snapshot_metadata = packages__cloud_firestore_platform_interface__src__snapshot_metadata$46dart.src__snapshot_metadata;
+  const get_options = packages__cloud_firestore_platform_interface__src__get_options$46dart.src__get_options;
+  const pointer = packages__cloud_firestore_platform_interface__src__internal__pointer$46dart.src__internal__pointer;
+  const field_path = packages__cloud_firestore_platform_interface__src__field_path$46dart.src__field_path;
+  const equality = packages__collection__src__equality$46dart.src__equality;
+  const timestamp = packages__cloud_firestore_platform_interface__src__timestamp$46dart.src__timestamp;
+  const geo_point = packages__cloud_firestore_platform_interface__src__geo_point$46dart.src__geo_point;
+  const blob = packages__cloud_firestore_platform_interface__src__blob$46dart.src__blob;
+  const platform_interface_field_value = packages__cloud_firestore_platform_interface__src__platform_interface__platform_interface_field_value$46dart.src__platform_interface__platform_interface_field_value;
+  const field_path_type = packages__cloud_firestore_platform_interface__src__internal__field_path_type$46dart.src__internal__field_path_type;
+  const settings = packages__cloud_firestore_platform_interface__src__settings$46dart.src__settings;
+  const firebase_core = packages__firebase_core__firebase_core$46dart.firebase_core;
+  const message_codecs = packages__flutter__src__services__system_channels$46dart.src__services__message_codecs;
+  const message_codec = packages__flutter__src__services__system_channels$46dart.src__services__message_codec;
+  const platform_channel = packages__flutter__src__services__system_channels$46dart.src__services__platform_channel;
+  const serialization = packages__flutter__src__foundation__serialization$46dart.src__foundation__serialization;
+  const exception$ = packages__cloud_firestore_platform_interface__src__method_channel__utils__exception$46dart.src__method_channel__utils__exception;
+  const source = packages__cloud_firestore_platform_interface__src__method_channel__utils__source$46dart.src__method_channel__utils__source;
+  const source$ = packages__cloud_firestore_platform_interface__src__source$46dart.src__source;
+  const auto_id_generator = packages__cloud_firestore_platform_interface__src__method_channel__utils__auto_id_generator$46dart.src__method_channel__utils__auto_id_generator;
+  const firebase_core_platform_interface = packages__firebase_core_platform_interface__firebase_core_platform_interface$46dart.firebase_core_platform_interface;
+  const persistence_settings = packages__cloud_firestore_platform_interface__src__persistence_settings$46dart.src__persistence_settings;
+  var platform_interface_write_batch = Object.create(dart.library);
+  var platform_interface_transaction = Object.create(dart.library);
+  var platform_interface_query_snapshot = Object.create(dart.library);
+  var platform_interface_query = Object.create(dart.library);
+  var method_channel_field_value_factory = Object.create(dart.library);
+  var platform_interface_field_value_factory = Object.create(dart.library);
+  var platform_interface_document_snapshot = Object.create(dart.library);
+  var platform_interface_document_reference = Object.create(dart.library);
+  var platform_interface_document_change = Object.create(dart.library);
+  var platform_interface_collection_reference = Object.create(dart.library);
+  var method_channel_field_value = Object.create(dart.library);
+  var firestore_message_codec = Object.create(dart.library);
+  var method_channel_write_batch = Object.create(dart.library);
+  var method_channel_transaction = Object.create(dart.library);
+  var method_channel_document_change = Object.create(dart.library);
+  var method_channel_query_snapshot = Object.create(dart.library);
+  var method_channel_query = Object.create(dart.library);
+  var method_channel_document_reference = Object.create(dart.library);
+  var method_channel_collection_reference = Object.create(dart.library);
+  var method_channel_firestore = Object.create(dart.library);
+  var platform_interface_firestore = Object.create(dart.library);
+  var cloud_firestore_platform_interface = Object.create(dart.library);
+  var $length = dartx.length;
+  var $_get = dartx._get;
+  var $containsKey = dartx.containsKey;
+  var $hashCode = dartx.hashCode;
+  var $_equals = dartx._equals;
+  var $toString = dartx.toString;
+  var $isEmpty = dartx.isEmpty;
+  var $add = dartx.add;
+  var $firstWhere = dartx.firstWhere;
+  var $addAll = dartx.addAll;
+  var $_set = dartx._set;
+  var $remove = dartx.remove;
+  dart._checkModuleNullSafetyMode(false);
+  var T$ = {
+    CollectionReferencePlatformL: () => (T$.CollectionReferencePlatformL = dart.constFn(dart.legacy(platform_interface_collection_reference.CollectionReferencePlatform)))(),
+    StringL: () => (T$.StringL = dart.constFn(dart.legacy(core.String)))(),
+    MapOfStringL$dynamic: () => (T$.MapOfStringL$dynamic = dart.constFn(core.Map$(T$.StringL(), dart.dynamic)))(),
+    ListL: () => (T$.ListL = dart.constFn(dart.legacy(core.List)))(),
+    ListOfListL: () => (T$.ListOfListL = dart.constFn(core.List$(T$.ListL())))(),
+    intL: () => (T$.intL = dart.constFn(dart.legacy(core.int)))(),
+    doubleL: () => (T$.doubleL = dart.constFn(dart.legacy(core.double)))(),
+    boolL: () => (T$.boolL = dart.constFn(dart.legacy(core.bool)))(),
+    LinkedHashMapOfStringL$dynamic: () => (T$.LinkedHashMapOfStringL$dynamic = dart.constFn(collection.LinkedHashMap$(T$.StringL(), dart.dynamic)))(),
+    FieldPathL: () => (T$.FieldPathL = dart.constFn(dart.legacy(field_path.FieldPath)))(),
+    MapLOfStringL$dynamic: () => (T$.MapLOfStringL$dynamic = dart.constFn(dart.legacy(T$.MapOfStringL$dynamic())))(),
+    StringLAndMapLOfStringL$dynamicTodynamic: () => (T$.StringLAndMapLOfStringL$dynamicTodynamic = dart.constFn(dart.fnType(dart.dynamic, [T$.StringL(), T$.MapLOfStringL$dynamic()])))(),
+    MapL: () => (T$.MapL = dart.constFn(dart.legacy(core.Map)))(),
+    intLAndMapLOfStringL$dynamicTodynamic: () => (T$.intLAndMapLOfStringL$dynamicTodynamic = dart.constFn(dart.fnType(dart.dynamic, [T$.intL(), T$.MapLOfStringL$dynamic()])))(),
+    DocumentSnapshotPlatformL: () => (T$.DocumentSnapshotPlatformL = dart.constFn(dart.legacy(platform_interface_document_snapshot.DocumentSnapshotPlatform)))(),
+    DocumentReferencePlatformL: () => (T$.DocumentReferencePlatformL = dart.constFn(dart.legacy(platform_interface_document_reference.DocumentReferencePlatform)))(),
+    DocumentChangeTypeL: () => (T$.DocumentChangeTypeL = dart.constFn(dart.legacy(platform_interface_document_change.DocumentChangeType)))(),
+    IdentityMapOfStringL$dynamic: () => (T$.IdentityMapOfStringL$dynamic = dart.constFn(_js_helper.IdentityMap$(T$.StringL(), dart.dynamic)))(),
+    FieldValueTypeL: () => (T$.FieldValueTypeL = dart.constFn(dart.legacy(method_channel_field_value.FieldValueType)))(),
+    MethodChannelFieldValueL: () => (T$.MethodChannelFieldValueL = dart.constFn(dart.legacy(method_channel_field_value.MethodChannelFieldValue)))(),
+    DefaultEqualityOfNeverL: () => (T$.DefaultEqualityOfNeverL = dart.constFn(equality.DefaultEquality$(dart.legacy(dart.Never))))(),
+    DateTimeL: () => (T$.DateTimeL = dart.constFn(dart.legacy(core.DateTime)))(),
+    TimestampL: () => (T$.TimestampL = dart.constFn(dart.legacy(timestamp.Timestamp)))(),
+    GeoPointL: () => (T$.GeoPointL = dart.constFn(dart.legacy(geo_point.GeoPoint)))(),
+    BlobL: () => (T$.BlobL = dart.constFn(dart.legacy(blob.Blob)))(),
+    FieldValuePlatformL: () => (T$.FieldValuePlatformL = dart.constFn(dart.legacy(platform_interface_field_value.FieldValuePlatform)))(),
+    FieldPathTypeL: () => (T$.FieldPathTypeL = dart.constFn(dart.legacy(field_path_type.FieldPathType)))(),
+    MethodChannelFirebaseFirestoreL: () => (T$.MethodChannelFirebaseFirestoreL = dart.constFn(dart.legacy(method_channel_firestore.MethodChannelFirebaseFirestore)))(),
+    MethodChannelQueryL: () => (T$.MethodChannelQueryL = dart.constFn(dart.legacy(method_channel_query.MethodChannelQuery)))(),
+    SettingsL: () => (T$.SettingsL = dart.constFn(dart.legacy(settings.Settings)))(),
+    Uint8ListL: () => (T$.Uint8ListL = dart.constFn(dart.legacy(typed_data.Uint8List)))(),
+    JSArrayOfMapLOfStringL$dynamic: () => (T$.JSArrayOfMapLOfStringL$dynamic = dart.constFn(_interceptors.JSArray$(T$.MapLOfStringL$dynamic())))(),
+    IdentityMapOfStringL$StringL: () => (T$.IdentityMapOfStringL$StringL = dart.constFn(_js_helper.IdentityMap$(T$.StringL(), T$.StringL())))(),
+    ObjectL: () => (T$.ObjectL = dart.constFn(dart.legacy(core.Object)))(),
+    IdentityMapOfStringL$ObjectL: () => (T$.IdentityMapOfStringL$ObjectL = dart.constFn(_js_helper.IdentityMap$(T$.StringL(), T$.ObjectL())))(),
+    DocumentChangeTypeLToboolL: () => (T$.DocumentChangeTypeLToboolL = dart.constFn(dart.fnType(T$.boolL(), [T$.DocumentChangeTypeL()])))(),
+    ListOfDocumentSnapshotPlatformL: () => (T$.ListOfDocumentSnapshotPlatformL = dart.constFn(core.List$(T$.DocumentSnapshotPlatformL())))(),
+    intLToDocumentSnapshotPlatformL: () => (T$.intLToDocumentSnapshotPlatformL = dart.constFn(dart.fnType(T$.DocumentSnapshotPlatformL(), [T$.intL()])))(),
+    DocumentChangePlatformL: () => (T$.DocumentChangePlatformL = dart.constFn(dart.legacy(platform_interface_document_change.DocumentChangePlatform)))(),
+    ListOfDocumentChangePlatformL: () => (T$.ListOfDocumentChangePlatformL = dart.constFn(core.List$(T$.DocumentChangePlatformL())))(),
+    MethodChannelDocumentChangeL: () => (T$.MethodChannelDocumentChangeL = dart.constFn(dart.legacy(method_channel_document_change.MethodChannelDocumentChange)))(),
+    intLToMethodChannelDocumentChangeL: () => (T$.intLToMethodChannelDocumentChangeL = dart.constFn(dart.fnType(T$.MethodChannelDocumentChangeL(), [T$.intL()])))(),
+    QuerySnapshotPlatformL: () => (T$.QuerySnapshotPlatformL = dart.constFn(dart.legacy(platform_interface_query_snapshot.QuerySnapshotPlatform)))(),
+    CompleterOfvoid: () => (T$.CompleterOfvoid = dart.constFn(async.Completer$(dart.void)))(),
+    StreamControllerOfQuerySnapshotPlatformL: () => (T$.StreamControllerOfQuerySnapshotPlatformL = dart.constFn(async.StreamController$(T$.QuerySnapshotPlatformL())))(),
+    FutureOfNull: () => (T$.FutureOfNull = dart.constFn(async.Future$(core.Null)))(),
+    FutureLOfNull: () => (T$.FutureLOfNull = dart.constFn(dart.legacy(T$.FutureOfNull())))(),
+    VoidToFutureLOfNull: () => (T$.VoidToFutureLOfNull = dart.constFn(dart.fnType(T$.FutureLOfNull(), [])))(),
+    StreamControllerOfDocumentSnapshotPlatformL: () => (T$.StreamControllerOfDocumentSnapshotPlatformL = dart.constFn(async.StreamController$(T$.DocumentSnapshotPlatformL())))(),
+    PointerL: () => (T$.PointerL = dart.constFn(dart.legacy(pointer.Pointer)))(),
+    FutureOfvoid: () => (T$.FutureOfvoid = dart.constFn(async.Future$(dart.void)))(),
+    FutureLOfvoid: () => (T$.FutureLOfvoid = dart.constFn(dart.legacy(T$.FutureOfvoid())))(),
+    MethodCallL: () => (T$.MethodCallL = dart.constFn(dart.legacy(message_codec.MethodCall)))(),
+    MethodCallLToFutureLOfvoid: () => (T$.MethodCallLToFutureLOfvoid = dart.constFn(dart.fnType(T$.FutureLOfvoid(), [T$.MethodCallL()])))(),
+    VoidToNull: () => (T$.VoidToNull = dart.constFn(dart.fnType(core.Null, [])))(),
+    ObjectLToNull: () => (T$.ObjectLToNull = dart.constFn(dart.fnType(core.Null, [T$.ObjectL()])))(),
+    PlatformExceptionL: () => (T$.PlatformExceptionL = dart.constFn(dart.legacy(message_codec.PlatformException)))(),
+    FirebaseFirestorePlatformL: () => (T$.FirebaseFirestorePlatformL = dart.constFn(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform)))(),
+    StreamControllerLOfQuerySnapshotPlatformL: () => (T$.StreamControllerLOfQuerySnapshotPlatformL = dart.constFn(dart.legacy(T$.StreamControllerOfQuerySnapshotPlatformL())))(),
+    IdentityMapOfintL$StreamControllerLOfQuerySnapshotPlatformL: () => (T$.IdentityMapOfintL$StreamControllerLOfQuerySnapshotPlatformL = dart.constFn(_js_helper.IdentityMap$(T$.intL(), T$.StreamControllerLOfQuerySnapshotPlatformL())))(),
+    StreamControllerLOfDocumentSnapshotPlatformL: () => (T$.StreamControllerLOfDocumentSnapshotPlatformL = dart.constFn(dart.legacy(T$.StreamControllerOfDocumentSnapshotPlatformL())))(),
+    IdentityMapOfintL$StreamControllerLOfDocumentSnapshotPlatformL: () => (T$.IdentityMapOfintL$StreamControllerLOfDocumentSnapshotPlatformL = dart.constFn(_js_helper.IdentityMap$(T$.intL(), T$.StreamControllerLOfDocumentSnapshotPlatformL())))(),
+    StreamControllerOfvoid: () => (T$.StreamControllerOfvoid = dart.constFn(async.StreamController$(dart.void)))(),
+    StreamControllerLOfvoid: () => (T$.StreamControllerLOfvoid = dart.constFn(dart.legacy(T$.StreamControllerOfvoid())))(),
+    IdentityMapOfintL$StreamControllerLOfvoid: () => (T$.IdentityMapOfintL$StreamControllerLOfvoid = dart.constFn(_js_helper.IdentityMap$(T$.intL(), T$.StreamControllerLOfvoid())))(),
+    FutureL: () => (T$.FutureL = dart.constFn(dart.legacy(async.Future)))(),
+    TransactionPlatformL: () => (T$.TransactionPlatformL = dart.constFn(dart.legacy(platform_interface_transaction.TransactionPlatform)))(),
+    TransactionPlatformLToFutureL: () => (T$.TransactionPlatformLToFutureL = dart.constFn(dart.fnType(T$.FutureL(), [T$.TransactionPlatformL()])))(),
+    TransactionPlatformLToLFutureL: () => (T$.TransactionPlatformLToLFutureL = dart.constFn(dart.legacy(T$.TransactionPlatformLToFutureL())))(),
+    IdentityMapOfintL$TransactionPlatformLToLFutureL: () => (T$.IdentityMapOfintL$TransactionPlatformLToLFutureL = dart.constFn(_js_helper.IdentityMap$(T$.intL(), T$.TransactionPlatformLToLFutureL())))(),
+    StreamControllerL: () => (T$.StreamControllerL = dart.constFn(dart.legacy(async.StreamController)))(),
+    IdentityMapOfintL$StreamControllerL: () => (T$.IdentityMapOfintL$StreamControllerL = dart.constFn(_js_helper.IdentityMap$(T$.intL(), T$.StreamControllerL())))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T$);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: platform_interface_document_change.DocumentChangeType.prototype,
+        [_name$]: "DocumentChangeType.added",
+        index: 0
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: platform_interface_document_change.DocumentChangeType.prototype,
+        [_name$]: "DocumentChangeType.modified",
+        index: 1
+      });
+    },
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: platform_interface_document_change.DocumentChangeType.prototype,
+        [_name$]: "DocumentChangeType.removed",
+        index: 2
+      });
+    },
+    get C3() {
+      return C[3] = dart.constList([C[0] || CT.C0, C[1] || CT.C1, C[2] || CT.C2], T$.DocumentChangeTypeL());
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: method_channel_field_value.FieldValueType.prototype,
+        [_name$0]: "FieldValueType.arrayUnion",
+        index: 0
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: method_channel_field_value.FieldValueType.prototype,
+        [_name$0]: "FieldValueType.arrayRemove",
+        index: 1
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: method_channel_field_value.FieldValueType.prototype,
+        [_name$0]: "FieldValueType.delete",
+        index: 2
+      });
+    },
+    get C7() {
+      return C[7] = dart.const({
+        __proto__: method_channel_field_value.FieldValueType.prototype,
+        [_name$0]: "FieldValueType.serverTimestamp",
+        index: 3
+      });
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: method_channel_field_value.FieldValueType.prototype,
+        [_name$0]: "FieldValueType.incrementDouble",
+        index: 4
+      });
+    },
+    get C9() {
+      return C[9] = dart.const({
+        __proto__: method_channel_field_value.FieldValueType.prototype,
+        [_name$0]: "FieldValueType.incrementInteger",
+        index: 5
+      });
+    },
+    get C10() {
+      return C[10] = dart.constList([C[4] || CT.C4, C[5] || CT.C5, C[6] || CT.C6, C[7] || CT.C7, C[8] || CT.C8, C[9] || CT.C9], T$.FieldValueTypeL());
+    },
+    get C12() {
+      return C[12] = dart.const({
+        __proto__: T$.DefaultEqualityOfNeverL().prototype
+      });
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: equality.DeepCollectionEquality.prototype,
+        [DeepCollectionEquality__unordered]: false,
+        [DeepCollectionEquality__base]: C[12] || CT.C12
+      });
+    },
+    get C13() {
+      return C[13] = dart.constMap(T$.FieldValueTypeL(), T$.intL(), [C[4] || CT.C4, 132, C[5] || CT.C5, 133, C[6] || CT.C6, 134, C[7] || CT.C7, 135, C[8] || CT.C8, 137, C[9] || CT.C9, 138]);
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: field_path_type.FieldPathType.prototype,
+        [_name]: "FieldPathType.documentId",
+        index: 0
+      });
+    },
+    get C14() {
+      return C[14] = dart.constMap(T$.FieldPathTypeL(), T$.intL(), [C[15] || CT.C15, 139]);
+    },
+    get C17() {
+      return C[17] = dart.const({
+        __proto__: source$.Source.prototype,
+        [_name$1]: "Source.serverAndCache",
+        index: 0
+      });
+    },
+    get C16() {
+      return C[16] = dart.const({
+        __proto__: get_options.GetOptions.prototype,
+        [GetOptions_source]: C[17] || CT.C17
+      });
+    },
+    get C18() {
+      return C[18] = dart.const(new _js_helper.PrivateSymbol.new('_pointer', _pointer$4));
+    },
+    get C19() {
+      return C[19] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 30000000
+      });
+    }
+  }, false);
+  var C = Array(20).fill(void 0);
+  var I = [
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_write_batch.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_transaction.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_query_snapshot.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_query.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/method_channel/method_channel_field_value_factory.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_field_value_factory.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_field_value_factory.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/platform_interface/platform_interface_document_snapshot.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_document_snapshot.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_document_reference.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_document_change.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_collection_reference.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_field_value.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/method_channel/utils/firestore_message_codec.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/utils/firestore_message_codec.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_write_batch.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/method_channel/method_channel_transaction.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_transaction.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_document_change.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_query_snapshot.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/method_channel/method_channel_query.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_query.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/method_channel/method_channel_document_reference.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_document_reference.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_collection_reference.dart",
+    "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-2.2.1/lib/src/method_channel/method_channel_firestore.dart",
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_firestore.dart",
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_firestore.dart"
+  ];
+  platform_interface_write_batch.WriteBatchPlatform = class WriteBatchPlatform extends plugin_platform_interface.PlatformInterface {
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_write_batch.WriteBatchPlatform._token);
+    }
+    commit() {
+      return async.async(dart.void, function* commit() {
+        dart.throw(new core.UnimplementedError.new("commit() is not implemented"));
+      });
+    }
+    delete(documentPath) {
+      dart.throw(new core.UnimplementedError.new("delete() is not implemented"));
+    }
+    set(documentPath, data, options = null) {
+      dart.throw(new core.UnimplementedError.new("set() is not implemented"));
+    }
+    update(documentPath, data) {
+      dart.throw(new core.UnimplementedError.new("update() is not implemented"));
+    }
+  };
+  (platform_interface_write_batch.WriteBatchPlatform.new = function() {
+    platform_interface_write_batch.WriteBatchPlatform.__proto__.new.call(this, {token: platform_interface_write_batch.WriteBatchPlatform._token});
+    ;
+  }).prototype = platform_interface_write_batch.WriteBatchPlatform.prototype;
+  dart.addTypeTests(platform_interface_write_batch.WriteBatchPlatform);
+  dart.addTypeCaches(platform_interface_write_batch.WriteBatchPlatform);
+  dart.setMethodSignature(platform_interface_write_batch.WriteBatchPlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_write_batch.WriteBatchPlatform.__proto__),
+    commit: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    delete: dart.fnType(dart.void, [dart.legacy(core.String)]),
+    set: dart.fnType(dart.void, [dart.legacy(core.String), dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))], [dart.legacy(set_options.SetOptions)]),
+    update: dart.fnType(dart.void, [dart.legacy(core.String), dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))])
+  }));
+  dart.setLibraryUri(platform_interface_write_batch.WriteBatchPlatform, I[0]);
+  dart.defineLazy(platform_interface_write_batch.WriteBatchPlatform, {
+    /*platform_interface_write_batch.WriteBatchPlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  platform_interface_transaction.TransactionPlatform = class TransactionPlatform extends plugin_platform_interface.PlatformInterface {
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_transaction.TransactionPlatform._token);
+    }
+    get commands() {
+      dart.throw(new core.UnimplementedError.new("commands is not implemented"));
+    }
+    get(documentPath) {
+      dart.throw(new core.UnimplementedError.new("get() is not implemented"));
+    }
+    delete(documentPath) {
+      dart.throw(new core.UnimplementedError.new("delete() is not implemented"));
+    }
+    update(documentPath, data) {
+      dart.throw(new core.UnimplementedError.new("update() is not implemented"));
+    }
+    set(documentPath, data, options = null) {
+      dart.throw(new core.UnimplementedError.new("set() is not implemented"));
+    }
+  };
+  (platform_interface_transaction.TransactionPlatform.new = function() {
+    platform_interface_transaction.TransactionPlatform.__proto__.new.call(this, {token: platform_interface_transaction.TransactionPlatform._token});
+    ;
+  }).prototype = platform_interface_transaction.TransactionPlatform.prototype;
+  dart.addTypeTests(platform_interface_transaction.TransactionPlatform);
+  dart.addTypeCaches(platform_interface_transaction.TransactionPlatform);
+  dart.setMethodSignature(platform_interface_transaction.TransactionPlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_transaction.TransactionPlatform.__proto__),
+    get: dart.fnType(dart.legacy(async.Future$(dart.legacy(platform_interface_document_snapshot.DocumentSnapshotPlatform))), [dart.legacy(core.String)]),
+    delete: dart.fnType(dart.legacy(platform_interface_transaction.TransactionPlatform), [dart.legacy(core.String)]),
+    update: dart.fnType(dart.legacy(platform_interface_transaction.TransactionPlatform), [dart.legacy(core.String), dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))]),
+    set: dart.fnType(dart.legacy(platform_interface_transaction.TransactionPlatform), [dart.legacy(core.String), dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))], [dart.legacy(set_options.SetOptions)])
+  }));
+  dart.setGetterSignature(platform_interface_transaction.TransactionPlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_transaction.TransactionPlatform.__proto__),
+    commands: dart.legacy(core.List$(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))))
+  }));
+  dart.setLibraryUri(platform_interface_transaction.TransactionPlatform, I[1]);
+  dart.defineLazy(platform_interface_transaction.TransactionPlatform, {
+    /*platform_interface_transaction.TransactionPlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  var docs$ = dart.privateName(platform_interface_query_snapshot, "QuerySnapshotPlatform.docs");
+  var docChanges$ = dart.privateName(platform_interface_query_snapshot, "QuerySnapshotPlatform.docChanges");
+  var metadata$ = dart.privateName(platform_interface_query_snapshot, "QuerySnapshotPlatform.metadata");
+  platform_interface_query_snapshot.QuerySnapshotPlatform = class QuerySnapshotPlatform extends plugin_platform_interface.PlatformInterface {
+    get docs() {
+      return this[docs$];
+    }
+    set docs(value) {
+      super.docs = value;
+    }
+    get docChanges() {
+      return this[docChanges$];
+    }
+    set docChanges(value) {
+      super.docChanges = value;
+    }
+    get metadata() {
+      return this[metadata$];
+    }
+    set metadata(value) {
+      super.metadata = value;
+    }
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_query_snapshot.QuerySnapshotPlatform._token);
+    }
+    get size() {
+      return this.docs[$length];
+    }
+  };
+  (platform_interface_query_snapshot.QuerySnapshotPlatform.new = function(docs, docChanges, metadata) {
+    this[docs$] = docs;
+    this[docChanges$] = docChanges;
+    this[metadata$] = metadata;
+    platform_interface_query_snapshot.QuerySnapshotPlatform.__proto__.new.call(this, {token: platform_interface_query_snapshot.QuerySnapshotPlatform._token});
+    ;
+  }).prototype = platform_interface_query_snapshot.QuerySnapshotPlatform.prototype;
+  dart.addTypeTests(platform_interface_query_snapshot.QuerySnapshotPlatform);
+  dart.addTypeCaches(platform_interface_query_snapshot.QuerySnapshotPlatform);
+  dart.setGetterSignature(platform_interface_query_snapshot.QuerySnapshotPlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_query_snapshot.QuerySnapshotPlatform.__proto__),
+    size: dart.legacy(core.int)
+  }));
+  dart.setLibraryUri(platform_interface_query_snapshot.QuerySnapshotPlatform, I[2]);
+  dart.setFieldSignature(platform_interface_query_snapshot.QuerySnapshotPlatform, () => ({
+    __proto__: dart.getFields(platform_interface_query_snapshot.QuerySnapshotPlatform.__proto__),
+    docs: dart.finalFieldType(dart.legacy(core.List$(dart.legacy(platform_interface_document_snapshot.DocumentSnapshotPlatform)))),
+    docChanges: dart.finalFieldType(dart.legacy(core.List$(dart.legacy(platform_interface_document_change.DocumentChangePlatform)))),
+    metadata: dart.finalFieldType(dart.legacy(snapshot_metadata.SnapshotMetadataPlatform))
+  }));
+  dart.defineLazy(platform_interface_query_snapshot.QuerySnapshotPlatform, {
+    /*platform_interface_query_snapshot.QuerySnapshotPlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  var firestore$ = dart.privateName(platform_interface_query, "QueryPlatform.firestore");
+  var parameters$ = dart.privateName(platform_interface_query, "QueryPlatform.parameters");
+  platform_interface_query.QueryPlatform = class QueryPlatform extends plugin_platform_interface.PlatformInterface {
+    get firestore() {
+      return this[firestore$];
+    }
+    set firestore(value) {
+      super.firestore = value;
+    }
+    get parameters() {
+      return this[parameters$];
+    }
+    set parameters(value) {
+      this[parameters$] = value;
+    }
+    get isCollectionGroupQuery() {
+      dart.throw(new core.UnimplementedError.new("isCollectionGroupQuery is not implemented"));
+    }
+    static verifyExtends(instance) {
+      if (!T$.CollectionReferencePlatformL().is(instance)) {
+        plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_query.QueryPlatform._token);
+      }
+    }
+    endAtDocument(orders, values) {
+      dart.throw(new core.UnimplementedError.new("endAtDocument() is not implemented"));
+    }
+    endAt(fields) {
+      dart.throw(new core.UnimplementedError.new("endAt() is not implemented"));
+    }
+    endBeforeDocument(orders, values) {
+      dart.throw(new core.UnimplementedError.new("endBeforeDocument() is not implemented"));
+    }
+    endBefore(values) {
+      dart.throw(new core.UnimplementedError.new("endBefore() is not implemented"));
+    }
+    get(options = null) {
+      dart.throw(new core.UnimplementedError.new("get() is not implemented"));
+    }
+    limit(limit) {
+      dart.throw(new core.UnimplementedError.new("limit() is not implemented"));
+    }
+    limitToLast(limit) {
+      dart.throw(new core.UnimplementedError.new("limitToLast() is not implemented"));
+    }
+    snapshots(opts) {
+      let includeMetadataChanges = opts && 'includeMetadataChanges' in opts ? opts.includeMetadataChanges : false;
+      dart.throw(new core.UnimplementedError.new("snapshots() is not implemented"));
+    }
+    orderBy(orders) {
+      dart.throw(new core.UnimplementedError.new("orderBy() is not implemented"));
+    }
+    startAfterDocument(orders, values) {
+      dart.throw(new core.UnimplementedError.new("startAfterDocument() is not implemented"));
+    }
+    startAfter(values) {
+      dart.throw(new core.UnimplementedError.new("startAfter() is not implemented"));
+    }
+    startAtDocument(orders, values) {
+      dart.throw(new core.UnimplementedError.new("startAtDocument() is not implemented"));
+    }
+    startAt(values) {
+      dart.throw(new core.UnimplementedError.new("startAt() is not implemented"));
+    }
+    where(conditions) {
+      dart.throw(new core.UnimplementedError.new("where() is not implemented"));
+    }
+  };
+  (platform_interface_query.QueryPlatform.new = function(firestore, parameters) {
+    let t0;
+    this[firestore$] = firestore;
+    this[parameters$] = (t0 = parameters, t0 == null ? platform_interface_query._initialParameters : t0);
+    platform_interface_query.QueryPlatform.__proto__.new.call(this, {token: platform_interface_query.QueryPlatform._token});
+    ;
+  }).prototype = platform_interface_query.QueryPlatform.prototype;
+  dart.addTypeTests(platform_interface_query.QueryPlatform);
+  dart.addTypeCaches(platform_interface_query.QueryPlatform);
+  dart.setMethodSignature(platform_interface_query.QueryPlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_query.QueryPlatform.__proto__),
+    endAtDocument: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List), dart.legacy(core.List)]),
+    endAt: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List)]),
+    endBeforeDocument: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List), dart.legacy(core.List)]),
+    endBefore: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List)]),
+    get: dart.fnType(dart.legacy(async.Future$(dart.legacy(platform_interface_query_snapshot.QuerySnapshotPlatform))), [], [dart.legacy(get_options.GetOptions)]),
+    limit: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.int)]),
+    limitToLast: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.int)]),
+    snapshots: dart.fnType(dart.legacy(async.Stream$(dart.legacy(platform_interface_query_snapshot.QuerySnapshotPlatform))), [], {includeMetadataChanges: dart.legacy(core.bool)}, {}),
+    orderBy: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List$(dart.legacy(core.List)))]),
+    startAfterDocument: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List), dart.legacy(core.List)]),
+    startAfter: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List)]),
+    startAtDocument: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List), dart.legacy(core.List)]),
+    startAt: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List)]),
+    where: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.List$(dart.legacy(core.List)))])
+  }));
+  dart.setGetterSignature(platform_interface_query.QueryPlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_query.QueryPlatform.__proto__),
+    isCollectionGroupQuery: dart.legacy(core.bool)
+  }));
+  dart.setLibraryUri(platform_interface_query.QueryPlatform, I[3]);
+  dart.setFieldSignature(platform_interface_query.QueryPlatform, () => ({
+    __proto__: dart.getFields(platform_interface_query.QueryPlatform.__proto__),
+    firestore: dart.finalFieldType(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform)),
+    parameters: dart.fieldType(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic)))
+  }));
+  dart.defineLazy(platform_interface_query.QueryPlatform, {
+    /*platform_interface_query.QueryPlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  dart.defineLazy(platform_interface_query, {
+    /*platform_interface_query._initialParameters*/get _initialParameters() {
+      return T$.MapOfStringL$dynamic().unmodifiable(new _js_helper.LinkedMap.from(["where", T$.ListOfListL().unmodifiable([]), "orderBy", T$.ListOfListL().unmodifiable([]), "startAt", null, "startAfter", null, "endAt", null, "endBefore", null, "limit", null, "limitToLast", null]));
+    },
+    set _initialParameters(_) {}
+  }, true);
+  platform_interface_field_value_factory.FieldValueFactoryPlatform = class FieldValueFactoryPlatform extends plugin_platform_interface.PlatformInterface {
+    static get instance() {
+      return platform_interface_field_value_factory.FieldValueFactoryPlatform._instance;
+    }
+    static set instance(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_field_value_factory.FieldValueFactoryPlatform._token);
+      platform_interface_field_value_factory.FieldValueFactoryPlatform._instance = instance;
+    }
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_field_value_factory.FieldValueFactoryPlatform._token);
+    }
+    arrayUnion(elements) {
+      dart.throw(new core.UnimplementedError.new("arrayUnion() is not implemented"));
+    }
+    arrayRemove(elements) {
+      dart.throw(new core.UnimplementedError.new("arrayRemove() is not implemented"));
+    }
+    delete() {
+      dart.throw(new core.UnimplementedError.new("delete() is not implemented"));
+    }
+    serverTimestamp() {
+      dart.throw(new core.UnimplementedError.new("serverTimestamp() is not implemented"));
+    }
+    increment(value) {
+      dart.throw(new core.UnimplementedError.new("increment() is not implemented"));
+    }
+  };
+  (platform_interface_field_value_factory.FieldValueFactoryPlatform.new = function() {
+    platform_interface_field_value_factory.FieldValueFactoryPlatform.__proto__.new.call(this, {token: platform_interface_field_value_factory.FieldValueFactoryPlatform._token});
+    ;
+  }).prototype = platform_interface_field_value_factory.FieldValueFactoryPlatform.prototype;
+  dart.addTypeTests(platform_interface_field_value_factory.FieldValueFactoryPlatform);
+  dart.addTypeCaches(platform_interface_field_value_factory.FieldValueFactoryPlatform);
+  dart.setMethodSignature(platform_interface_field_value_factory.FieldValueFactoryPlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_field_value_factory.FieldValueFactoryPlatform.__proto__),
+    arrayUnion: dart.fnType(dart.dynamic, [dart.legacy(core.List)]),
+    arrayRemove: dart.fnType(dart.dynamic, [dart.legacy(core.List)]),
+    delete: dart.fnType(dart.dynamic, []),
+    serverTimestamp: dart.fnType(dart.dynamic, []),
+    increment: dart.fnType(dart.dynamic, [dart.legacy(core.num)])
+  }));
+  dart.setLibraryUri(platform_interface_field_value_factory.FieldValueFactoryPlatform, I[5]);
+  dart.defineLazy(platform_interface_field_value_factory.FieldValueFactoryPlatform, {
+    /*platform_interface_field_value_factory.FieldValueFactoryPlatform._instance*/get _instance() {
+      return new method_channel_field_value_factory.MethodChannelFieldValueFactory.new();
+    },
+    set _instance(_) {},
+    /*platform_interface_field_value_factory.FieldValueFactoryPlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  method_channel_field_value_factory.MethodChannelFieldValueFactory = class MethodChannelFieldValueFactory extends platform_interface_field_value_factory.FieldValueFactoryPlatform {
+    arrayRemove(elements) {
+      return new method_channel_field_value.MethodChannelFieldValue.new(method_channel_field_value.FieldValueType.arrayRemove, elements);
+    }
+    arrayUnion(elements) {
+      return new method_channel_field_value.MethodChannelFieldValue.new(method_channel_field_value.FieldValueType.arrayUnion, elements);
+    }
+    delete() {
+      return new method_channel_field_value.MethodChannelFieldValue.new(method_channel_field_value.FieldValueType.delete, null);
+    }
+    increment(value) {
+      if (!(T$.intL().is(value) || T$.doubleL().is(value))) dart.assertFailed(null, I[4], 30, 12, "value is int || value is double");
+      if (T$.doubleL().is(value)) {
+        return new method_channel_field_value.MethodChannelFieldValue.new(method_channel_field_value.FieldValueType.incrementDouble, value);
+      } else if (T$.intL().is(value)) {
+        return new method_channel_field_value.MethodChannelFieldValue.new(method_channel_field_value.FieldValueType.incrementInteger, value);
+      }
+      return null;
+    }
+    serverTimestamp() {
+      return new method_channel_field_value.MethodChannelFieldValue.new(method_channel_field_value.FieldValueType.serverTimestamp, null);
+    }
+  };
+  (method_channel_field_value_factory.MethodChannelFieldValueFactory.new = function() {
+    method_channel_field_value_factory.MethodChannelFieldValueFactory.__proto__.new.call(this);
+    ;
+  }).prototype = method_channel_field_value_factory.MethodChannelFieldValueFactory.prototype;
+  dart.addTypeTests(method_channel_field_value_factory.MethodChannelFieldValueFactory);
+  dart.addTypeCaches(method_channel_field_value_factory.MethodChannelFieldValueFactory);
+  dart.setMethodSignature(method_channel_field_value_factory.MethodChannelFieldValueFactory, () => ({
+    __proto__: dart.getMethods(method_channel_field_value_factory.MethodChannelFieldValueFactory.__proto__),
+    arrayRemove: dart.fnType(dart.legacy(method_channel_field_value.MethodChannelFieldValue), [dart.legacy(core.List)]),
+    arrayUnion: dart.fnType(dart.legacy(method_channel_field_value.MethodChannelFieldValue), [dart.legacy(core.List)]),
+    delete: dart.fnType(dart.legacy(method_channel_field_value.MethodChannelFieldValue), []),
+    increment: dart.fnType(dart.legacy(method_channel_field_value.MethodChannelFieldValue), [dart.legacy(core.num)]),
+    serverTimestamp: dart.fnType(dart.legacy(method_channel_field_value.MethodChannelFieldValue), [])
+  }));
+  dart.setLibraryUri(method_channel_field_value_factory.MethodChannelFieldValueFactory, I[6]);
+  var _firestore$ = dart.privateName(platform_interface_document_snapshot, "_firestore");
+  var _data$ = dart.privateName(platform_interface_document_snapshot, "_data");
+  var _pointer = dart.privateName(platform_interface_document_snapshot, "_pointer");
+  platform_interface_document_snapshot.DocumentSnapshotPlatform = class DocumentSnapshotPlatform extends plugin_platform_interface.PlatformInterface {
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_document_snapshot.DocumentSnapshotPlatform._token);
+    }
+    get id() {
+      return this[_pointer].id;
+    }
+    get metadata() {
+      return new snapshot_metadata.SnapshotMetadataPlatform.new(T$.boolL().as(dart.dsend(this[_data$][$_get]("metadata"), '_get', ["hasPendingWrites"])), T$.boolL().as(dart.dsend(this[_data$][$_get]("metadata"), '_get', ["isFromCache"])));
+    }
+    get exists() {
+      return this[_data$][$_get]("data") != null;
+    }
+    get reference() {
+      return this[_firestore$].doc(this[_pointer].path);
+    }
+    data() {
+      return dart.test(this.exists) ? T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as(this[_data$][$_get]("data"))) : null;
+    }
+    get(field) {
+      if (!(field != null)) dart.assertFailed(null, I[7], 68, 12, "field != null");
+      if (!(T$.StringL().is(field) || T$.FieldPathL().is(field))) dart.assertFailed("Supported [field] types are [String] and [FieldPath]", I[7], 69, 12, "field is String || field is FieldPath");
+      if (!dart.test(this.exists)) {
+        dart.throw(new core.StateError.new("cannot get a field on a " + dart.str(dart.wrapType(platform_interface_document_snapshot.DocumentSnapshotPlatform)) + " which does not exist"));
+      }
+      function _findKeyValueInMap(key, map) {
+        if (dart.test(map[$containsKey](key))) {
+          return map[$_get](key);
+        }
+        dart.throw(new core.StateError.new("field does not exist within the " + dart.str(dart.wrapType(platform_interface_document_snapshot.DocumentSnapshotPlatform))));
+      }
+      dart.fn(_findKeyValueInMap, T$.StringLAndMapLOfStringL$dynamicTodynamic());
+      let fieldPath = null;
+      if (T$.StringL().is(field)) {
+        fieldPath = new field_path.FieldPath.fromString(field);
+      } else {
+        fieldPath = T$.FieldPathL().as(field);
+      }
+      let components = fieldPath.components;
+      let snapshotData = this.data();
+      function _findComponent(componentIndex, data) {
+        let isLast = dart.notNull(componentIndex) + 1 === components[$length];
+        let value = _findKeyValueInMap(components[$_get](componentIndex), data);
+        if (isLast) {
+          return value;
+        }
+        if (T$.MapL().is(value)) {
+          return _findComponent(dart.notNull(componentIndex) + 1, T$.LinkedHashMapOfStringL$dynamic().from(value));
+        } else {
+          dart.throw(new core.StateError.new("field does not exist within the " + dart.str(dart.wrapType(platform_interface_document_snapshot.DocumentSnapshotPlatform))));
+        }
+      }
+      dart.fn(_findComponent, T$.intLAndMapLOfStringL$dynamicTodynamic());
+      return _findComponent(0, snapshotData);
+    }
+    _get(field) {
+      return this.get(field);
+    }
+  };
+  (platform_interface_document_snapshot.DocumentSnapshotPlatform.new = function(_firestore, path, _data) {
+    this[_firestore$] = _firestore;
+    this[_data$] = _data;
+    this[_pointer] = new pointer.Pointer.new(path);
+    platform_interface_document_snapshot.DocumentSnapshotPlatform.__proto__.new.call(this, {token: platform_interface_document_snapshot.DocumentSnapshotPlatform._token});
+    ;
+  }).prototype = platform_interface_document_snapshot.DocumentSnapshotPlatform.prototype;
+  dart.addTypeTests(platform_interface_document_snapshot.DocumentSnapshotPlatform);
+  dart.addTypeCaches(platform_interface_document_snapshot.DocumentSnapshotPlatform);
+  dart.setMethodSignature(platform_interface_document_snapshot.DocumentSnapshotPlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_document_snapshot.DocumentSnapshotPlatform.__proto__),
+    data: dart.fnType(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic)), []),
+    get: dart.fnType(dart.dynamic, [dart.dynamic]),
+    _get: dart.fnType(dart.dynamic, [dart.dynamic])
+  }));
+  dart.setGetterSignature(platform_interface_document_snapshot.DocumentSnapshotPlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_document_snapshot.DocumentSnapshotPlatform.__proto__),
+    id: dart.legacy(core.String),
+    metadata: dart.legacy(snapshot_metadata.SnapshotMetadataPlatform),
+    exists: dart.legacy(core.bool),
+    reference: dart.legacy(platform_interface_document_reference.DocumentReferencePlatform)
+  }));
+  dart.setLibraryUri(platform_interface_document_snapshot.DocumentSnapshotPlatform, I[8]);
+  dart.setFieldSignature(platform_interface_document_snapshot.DocumentSnapshotPlatform, () => ({
+    __proto__: dart.getFields(platform_interface_document_snapshot.DocumentSnapshotPlatform.__proto__),
+    [_firestore$]: dart.finalFieldType(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform)),
+    [_pointer]: dart.finalFieldType(dart.legacy(pointer.Pointer)),
+    [_data$]: dart.finalFieldType(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic)))
+  }));
+  dart.defineLazy(platform_interface_document_snapshot.DocumentSnapshotPlatform, {
+    /*platform_interface_document_snapshot.DocumentSnapshotPlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  var firestore$0 = dart.privateName(platform_interface_document_reference, "DocumentReferencePlatform.firestore");
+  var _pointer$ = dart.privateName(platform_interface_document_reference, "_pointer");
+  platform_interface_document_reference.DocumentReferencePlatform = class DocumentReferencePlatform extends plugin_platform_interface.PlatformInterface {
+    get firestore() {
+      return this[firestore$0];
+    }
+    set firestore(value) {
+      super.firestore = value;
+    }
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_document_reference.DocumentReferencePlatform._token);
+    }
+    get path() {
+      return this[_pointer$].path;
+    }
+    get id() {
+      return this[_pointer$].id;
+    }
+    get parent() {
+      return this.firestore.collection(this[_pointer$].parentPath());
+    }
+    collection(collectionPath) {
+      return this.firestore.collection(this[_pointer$].collectionPath(collectionPath));
+    }
+    delete() {
+      dart.throw(new core.UnimplementedError.new("delete() is not implemented"));
+    }
+    get(options = null) {
+      return async.async(T$.DocumentSnapshotPlatformL(), function* get() {
+        dart.throw(new core.UnimplementedError.new("get() is not implemented"));
+      });
+    }
+    snapshots(opts) {
+      let includeMetadataChanges = opts && 'includeMetadataChanges' in opts ? opts.includeMetadataChanges : false;
+      dart.throw(new core.UnimplementedError.new("snapshots() is not implemented"));
+    }
+    set(data, options = null) {
+      dart.throw(new core.UnimplementedError.new("set() is not implemented"));
+    }
+    update(data) {
+      dart.throw(new core.UnimplementedError.new("update() is not implemented"));
+    }
+    _equals(o) {
+      if (o == null) return false;
+      return T$.DocumentReferencePlatformL().is(o) && dart.equals(o.firestore, this.firestore) && o.path == this.path;
+    }
+    get hashCode() {
+      return dart.hashCode(this.path);
+    }
+    toString() {
+      return dart.str(dart.wrapType(platform_interface_document_reference.DocumentReferencePlatform)) + "(" + dart.str(this.path) + ")";
+    }
+  };
+  (platform_interface_document_reference.DocumentReferencePlatform.new = function(firestore, path) {
+    this[firestore$0] = firestore;
+    this[_pointer$] = new pointer.Pointer.new(path);
+    platform_interface_document_reference.DocumentReferencePlatform.__proto__.new.call(this, {token: platform_interface_document_reference.DocumentReferencePlatform._token});
+    ;
+  }).prototype = platform_interface_document_reference.DocumentReferencePlatform.prototype;
+  dart.addTypeTests(platform_interface_document_reference.DocumentReferencePlatform);
+  dart.addTypeCaches(platform_interface_document_reference.DocumentReferencePlatform);
+  dart.setMethodSignature(platform_interface_document_reference.DocumentReferencePlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_document_reference.DocumentReferencePlatform.__proto__),
+    collection: dart.fnType(dart.legacy(platform_interface_collection_reference.CollectionReferencePlatform), [dart.legacy(core.String)]),
+    delete: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    get: dart.fnType(dart.legacy(async.Future$(dart.legacy(platform_interface_document_snapshot.DocumentSnapshotPlatform))), [], [dart.legacy(get_options.GetOptions)]),
+    snapshots: dart.fnType(dart.legacy(async.Stream$(dart.legacy(platform_interface_document_snapshot.DocumentSnapshotPlatform))), [], {includeMetadataChanges: dart.legacy(core.bool)}, {}),
+    set: dart.fnType(dart.legacy(async.Future$(dart.void)), [dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))], [dart.legacy(set_options.SetOptions)]),
+    update: dart.fnType(dart.legacy(async.Future$(dart.void)), [dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))]),
+    _equals: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    [$_equals]: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    toString: dart.fnType(dart.legacy(core.String), []),
+    [$toString]: dart.fnType(dart.legacy(core.String), [])
+  }));
+  dart.setGetterSignature(platform_interface_document_reference.DocumentReferencePlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_document_reference.DocumentReferencePlatform.__proto__),
+    path: dart.legacy(core.String),
+    id: dart.legacy(core.String),
+    parent: dart.legacy(platform_interface_collection_reference.CollectionReferencePlatform),
+    hashCode: dart.legacy(core.int),
+    [$hashCode]: dart.legacy(core.int)
+  }));
+  dart.setLibraryUri(platform_interface_document_reference.DocumentReferencePlatform, I[9]);
+  dart.setFieldSignature(platform_interface_document_reference.DocumentReferencePlatform, () => ({
+    __proto__: dart.getFields(platform_interface_document_reference.DocumentReferencePlatform.__proto__),
+    firestore: dart.finalFieldType(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform)),
+    [_pointer$]: dart.finalFieldType(dart.legacy(pointer.Pointer))
+  }));
+  dart.defineExtensionMethods(platform_interface_document_reference.DocumentReferencePlatform, ['_equals', 'toString']);
+  dart.defineExtensionAccessors(platform_interface_document_reference.DocumentReferencePlatform, ['hashCode']);
+  dart.defineLazy(platform_interface_document_reference.DocumentReferencePlatform, {
+    /*platform_interface_document_reference.DocumentReferencePlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  var _name$ = dart.privateName(platform_interface_document_change, "_name");
+  platform_interface_document_change.DocumentChangeType = class DocumentChangeType extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (platform_interface_document_change.DocumentChangeType.new = function(index, _name) {
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = platform_interface_document_change.DocumentChangeType.prototype;
+  dart.addTypeTests(platform_interface_document_change.DocumentChangeType);
+  dart.addTypeCaches(platform_interface_document_change.DocumentChangeType);
+  dart.setMethodSignature(platform_interface_document_change.DocumentChangeType, () => ({
+    __proto__: dart.getMethods(platform_interface_document_change.DocumentChangeType.__proto__),
+    toString: dart.fnType(dart.legacy(core.String), []),
+    [$toString]: dart.fnType(dart.legacy(core.String), [])
+  }));
+  dart.setLibraryUri(platform_interface_document_change.DocumentChangeType, I[10]);
+  dart.setFieldSignature(platform_interface_document_change.DocumentChangeType, () => ({
+    __proto__: dart.getFields(platform_interface_document_change.DocumentChangeType.__proto__),
+    index: dart.finalFieldType(dart.legacy(core.int)),
+    [_name$]: dart.finalFieldType(dart.legacy(core.String))
+  }));
+  dart.defineExtensionMethods(platform_interface_document_change.DocumentChangeType, ['toString']);
+  platform_interface_document_change.DocumentChangeType.added = C[0] || CT.C0;
+  platform_interface_document_change.DocumentChangeType.modified = C[1] || CT.C1;
+  platform_interface_document_change.DocumentChangeType.removed = C[2] || CT.C2;
+  platform_interface_document_change.DocumentChangeType.values = C[3] || CT.C3;
+  var type$ = dart.privateName(platform_interface_document_change, "DocumentChangePlatform.type");
+  var oldIndex$ = dart.privateName(platform_interface_document_change, "DocumentChangePlatform.oldIndex");
+  var newIndex$ = dart.privateName(platform_interface_document_change, "DocumentChangePlatform.newIndex");
+  var document$ = dart.privateName(platform_interface_document_change, "DocumentChangePlatform.document");
+  platform_interface_document_change.DocumentChangePlatform = class DocumentChangePlatform extends plugin_platform_interface.PlatformInterface {
+    get type() {
+      return this[type$];
+    }
+    set type(value) {
+      super.type = value;
+    }
+    get oldIndex() {
+      return this[oldIndex$];
+    }
+    set oldIndex(value) {
+      super.oldIndex = value;
+    }
+    get newIndex() {
+      return this[newIndex$];
+    }
+    set newIndex(value) {
+      super.newIndex = value;
+    }
+    get document() {
+      return this[document$];
+    }
+    set document(value) {
+      super.document = value;
+    }
+    static verifyExtends(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_document_change.DocumentChangePlatform._token);
+    }
+  };
+  (platform_interface_document_change.DocumentChangePlatform.new = function(type, oldIndex, newIndex, document) {
+    this[type$] = type;
+    this[oldIndex$] = oldIndex;
+    this[newIndex$] = newIndex;
+    this[document$] = document;
+    platform_interface_document_change.DocumentChangePlatform.__proto__.new.call(this, {token: platform_interface_document_change.DocumentChangePlatform._token});
+    ;
+  }).prototype = platform_interface_document_change.DocumentChangePlatform.prototype;
+  dart.addTypeTests(platform_interface_document_change.DocumentChangePlatform);
+  dart.addTypeCaches(platform_interface_document_change.DocumentChangePlatform);
+  dart.setLibraryUri(platform_interface_document_change.DocumentChangePlatform, I[10]);
+  dart.setFieldSignature(platform_interface_document_change.DocumentChangePlatform, () => ({
+    __proto__: dart.getFields(platform_interface_document_change.DocumentChangePlatform.__proto__),
+    type: dart.finalFieldType(dart.legacy(platform_interface_document_change.DocumentChangeType)),
+    oldIndex: dart.finalFieldType(dart.legacy(core.int)),
+    newIndex: dart.finalFieldType(dart.legacy(core.int)),
+    document: dart.finalFieldType(dart.legacy(platform_interface_document_snapshot.DocumentSnapshotPlatform))
+  }));
+  dart.defineLazy(platform_interface_document_change.DocumentChangePlatform, {
+    /*platform_interface_document_change.DocumentChangePlatform._token*/get _token() {
+      return new core.Object.new();
+    }
+  }, true);
+  var _pointer$0 = dart.privateName(platform_interface_collection_reference, "_pointer");
+  platform_interface_collection_reference.CollectionReferencePlatform = class CollectionReferencePlatform extends platform_interface_query.QueryPlatform {
+    get id() {
+      return this[_pointer$0].id;
+    }
+    get parent() {
+      let parentPath = this[_pointer$0].parentPath();
+      if (parentPath == null) {
+        return null;
+      }
+      return this.firestore.doc(parentPath);
+    }
+    get path() {
+      return this[_pointer$0].path;
+    }
+    doc(path = null) {
+      dart.throw(new core.UnimplementedError.new("doc() is not implemented"));
+    }
+    _equals(o) {
+      if (o == null) return false;
+      return T$.CollectionReferencePlatformL().is(o) && dart.equals(o.firestore, this.firestore) && o.path == this.path;
+    }
+    get hashCode() {
+      return dart.hashCode(this.path);
+    }
+    toString() {
+      return dart.str(dart.wrapType(platform_interface_collection_reference.CollectionReferencePlatform)) + "(" + dart.str(this.path) + ")";
+    }
+  };
+  (platform_interface_collection_reference.CollectionReferencePlatform.new = function(firestore, path) {
+    this[_pointer$0] = new pointer.Pointer.new(path);
+    platform_interface_collection_reference.CollectionReferencePlatform.__proto__.new.call(this, firestore, new (T$.IdentityMapOfStringL$dynamic()).new());
+    ;
+  }).prototype = platform_interface_collection_reference.CollectionReferencePlatform.prototype;
+  dart.addTypeTests(platform_interface_collection_reference.CollectionReferencePlatform);
+  dart.addTypeCaches(platform_interface_collection_reference.CollectionReferencePlatform);
+  dart.setMethodSignature(platform_interface_collection_reference.CollectionReferencePlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_collection_reference.CollectionReferencePlatform.__proto__),
+    doc: dart.fnType(dart.legacy(platform_interface_document_reference.DocumentReferencePlatform), [], [dart.legacy(core.String)]),
+    _equals: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    [$_equals]: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    toString: dart.fnType(dart.legacy(core.String), []),
+    [$toString]: dart.fnType(dart.legacy(core.String), [])
+  }));
+  dart.setGetterSignature(platform_interface_collection_reference.CollectionReferencePlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_collection_reference.CollectionReferencePlatform.__proto__),
+    id: dart.legacy(core.String),
+    parent: dart.legacy(platform_interface_document_reference.DocumentReferencePlatform),
+    path: dart.legacy(core.String),
+    hashCode: dart.legacy(core.int),
+    [$hashCode]: dart.legacy(core.int)
+  }));
+  dart.setLibraryUri(platform_interface_collection_reference.CollectionReferencePlatform, I[11]);
+  dart.setFieldSignature(platform_interface_collection_reference.CollectionReferencePlatform, () => ({
+    __proto__: dart.getFields(platform_interface_collection_reference.CollectionReferencePlatform.__proto__),
+    [_pointer$0]: dart.finalFieldType(dart.legacy(pointer.Pointer))
+  }));
+  dart.defineExtensionMethods(platform_interface_collection_reference.CollectionReferencePlatform, ['_equals', 'toString']);
+  dart.defineExtensionAccessors(platform_interface_collection_reference.CollectionReferencePlatform, ['hashCode']);
+  var _name$0 = dart.privateName(method_channel_field_value, "_name");
+  method_channel_field_value.FieldValueType = class FieldValueType extends core.Object {
+    toString() {
+      return this[_name$0];
+    }
+  };
+  (method_channel_field_value.FieldValueType.new = function(index, _name) {
+    this.index = index;
+    this[_name$0] = _name;
+    ;
+  }).prototype = method_channel_field_value.FieldValueType.prototype;
+  dart.addTypeTests(method_channel_field_value.FieldValueType);
+  dart.addTypeCaches(method_channel_field_value.FieldValueType);
+  dart.setMethodSignature(method_channel_field_value.FieldValueType, () => ({
+    __proto__: dart.getMethods(method_channel_field_value.FieldValueType.__proto__),
+    toString: dart.fnType(dart.legacy(core.String), []),
+    [$toString]: dart.fnType(dart.legacy(core.String), [])
+  }));
+  dart.setLibraryUri(method_channel_field_value.FieldValueType, I[12]);
+  dart.setFieldSignature(method_channel_field_value.FieldValueType, () => ({
+    __proto__: dart.getFields(method_channel_field_value.FieldValueType.__proto__),
+    index: dart.finalFieldType(dart.legacy(core.int)),
+    [_name$0]: dart.finalFieldType(dart.legacy(core.String))
+  }));
+  dart.defineExtensionMethods(method_channel_field_value.FieldValueType, ['toString']);
+  method_channel_field_value.FieldValueType.arrayUnion = C[4] || CT.C4;
+  method_channel_field_value.FieldValueType.arrayRemove = C[5] || CT.C5;
+  method_channel_field_value.FieldValueType.delete = C[6] || CT.C6;
+  method_channel_field_value.FieldValueType.serverTimestamp = C[7] || CT.C7;
+  method_channel_field_value.FieldValueType.incrementDouble = C[8] || CT.C8;
+  method_channel_field_value.FieldValueType.incrementInteger = C[9] || CT.C9;
+  method_channel_field_value.FieldValueType.values = C[10] || CT.C10;
+  var type$0 = dart.privateName(method_channel_field_value, "MethodChannelFieldValue.type");
+  var value$ = dart.privateName(method_channel_field_value, "MethodChannelFieldValue.value");
+  var DeepCollectionEquality__unordered = dart.privateName(equality, "DeepCollectionEquality._unordered");
+  var DeepCollectionEquality__base = dart.privateName(equality, "DeepCollectionEquality._base");
+  method_channel_field_value.MethodChannelFieldValue = class MethodChannelFieldValue extends core.Object {
+    get type() {
+      return this[type$0];
+    }
+    set type(value) {
+      super.type = value;
+    }
+    get value() {
+      return this[value$];
+    }
+    set value(value) {
+      super.value = value;
+    }
+    _equals(other) {
+      if (other == null) return false;
+      return T$.MethodChannelFieldValueL().is(other) && other.type == this.type && dart.test((C[11] || CT.C11).equals(other.value, this.value));
+    }
+    get hashCode() {
+      return ui.hashValues(this.type, this.value);
+    }
+  };
+  (method_channel_field_value.MethodChannelFieldValue.new = function(type, value) {
+    this[type$0] = type;
+    this[value$] = value;
+    ;
+  }).prototype = method_channel_field_value.MethodChannelFieldValue.prototype;
+  dart.addTypeTests(method_channel_field_value.MethodChannelFieldValue);
+  dart.addTypeCaches(method_channel_field_value.MethodChannelFieldValue);
+  dart.setMethodSignature(method_channel_field_value.MethodChannelFieldValue, () => ({
+    __proto__: dart.getMethods(method_channel_field_value.MethodChannelFieldValue.__proto__),
+    _equals: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    [$_equals]: dart.fnType(dart.legacy(core.bool), [dart.dynamic])
+  }));
+  dart.setGetterSignature(method_channel_field_value.MethodChannelFieldValue, () => ({
+    __proto__: dart.getGetters(method_channel_field_value.MethodChannelFieldValue.__proto__),
+    hashCode: dart.legacy(core.int),
+    [$hashCode]: dart.legacy(core.int)
+  }));
+  dart.setLibraryUri(method_channel_field_value.MethodChannelFieldValue, I[12]);
+  dart.setFieldSignature(method_channel_field_value.MethodChannelFieldValue, () => ({
+    __proto__: dart.getFields(method_channel_field_value.MethodChannelFieldValue.__proto__),
+    type: dart.finalFieldType(dart.legacy(method_channel_field_value.FieldValueType)),
+    value: dart.finalFieldType(dart.dynamic)
+  }));
+  dart.defineExtensionMethods(method_channel_field_value.MethodChannelFieldValue, ['_equals']);
+  dart.defineExtensionAccessors(method_channel_field_value.MethodChannelFieldValue, ['hashCode']);
+  var _name = dart.privateName(field_path_type, "_name");
+  firestore_message_codec.FirestoreMessageCodec = class FirestoreMessageCodec extends message_codecs.StandardMessageCodec {
+    writeValue(buffer, value) {
+      if (T$.DateTimeL().is(value)) {
+        buffer.putUint8(128);
+        buffer.putInt64(value.millisecondsSinceEpoch);
+      } else if (T$.TimestampL().is(value)) {
+        buffer.putUint8(136);
+        buffer.putInt64(value.seconds);
+        buffer.putInt32(value.nanoseconds);
+      } else if (T$.GeoPointL().is(value)) {
+        buffer.putUint8(129);
+        buffer.putFloat64(value.latitude);
+        buffer.putFloat64(value.longitude);
+      } else if (T$.DocumentReferencePlatformL().is(value)) {
+        buffer.putUint8(130);
+        this.writeValue(buffer, value.firestore);
+        this.writeValue(buffer, value.path);
+      } else if (T$.BlobL().is(value)) {
+        buffer.putUint8(131);
+        this.writeSize(buffer, value.bytes[$length]);
+        buffer.putUint8List(value.bytes);
+      } else if (T$.FieldValuePlatformL().is(value)) {
+        let delegate = T$.MethodChannelFieldValueL().as(platform_interface_field_value.FieldValuePlatform.getDelegate(value));
+        let code = firestore_message_codec.FirestoreMessageCodec._kFieldValueCodes[$_get](delegate.type);
+        if (!(code != null)) dart.assertFailed(null, I[13], 79, 14, "code != null");
+        buffer.putUint8(code);
+        if (delegate.value != null) this.writeValue(buffer, delegate.value);
+      } else if (T$.FieldPathTypeL().is(value)) {
+        let code = firestore_message_codec.FirestoreMessageCodec._kFieldPathCodes[$_get](value);
+        if (!(code != null)) dart.assertFailed(null, I[13], 84, 14, "code != null");
+        buffer.putUint8(code);
+      } else if (T$.FieldPathL().is(value)) {
+        buffer.putUint8(140);
+        this.writeSize(buffer, value.components[$length]);
+        for (let item of value.components) {
+          this.writeValue(buffer, item);
+        }
+      } else if (T$.MethodChannelFirebaseFirestoreL().is(value)) {
+        buffer.putUint8(144);
+        this.writeValue(buffer, value.app.name);
+        this.writeValue(buffer, value.settings);
+      } else if (T$.MethodChannelQueryL().is(value)) {
+        buffer.putUint8(145);
+        this.writeValue(buffer, new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", value.firestore, "path", value.path, "isCollectionGroup", value.isCollectionGroupQuery, "parameters", value.parameters]));
+      } else if (T$.SettingsL().is(value)) {
+        buffer.putUint8(146);
+        this.writeValue(buffer, value.asMap);
+      } else if (dart.equals(value, 0 / 0)) {
+        buffer.putUint8(141);
+      } else if (dart.equals(value, 1 / 0)) {
+        buffer.putUint8(142);
+      } else if (dart.equals(value, -1 / 0)) {
+        buffer.putUint8(143);
+      } else {
+        super.writeValue(buffer, value);
+      }
+    }
+    readValueOfType(type, buffer) {
+      switch (type) {
+        case 128:
+        {
+          return new core.DateTime.fromMillisecondsSinceEpoch(buffer.getInt64());
+        }
+        case 136:
+        {
+          return new timestamp.Timestamp.new(buffer.getInt64(), buffer.getInt32());
+        }
+        case 129:
+        {
+          return new geo_point.GeoPoint.new(buffer.getFloat64(), buffer.getFloat64());
+        }
+        case 130:
+        {
+          let appName = T$.StringL().as(this.readValue(buffer));
+          let path = T$.StringL().as(this.readValue(buffer));
+          let app = firebase_core.Firebase.app(appName);
+          let firestore = platform_interface_firestore.FirebaseFirestorePlatform.instanceFor({app: app});
+          return firestore.doc(path);
+        }
+        case 131:
+        {
+          let length = this.readSize(buffer);
+          let bytes = buffer.getUint8List(length);
+          return new blob.Blob.new(T$.Uint8ListL().as(bytes));
+        }
+        case 139:
+        {
+          return field_path.FieldPath.documentId;
+        }
+        case 141:
+        {
+          return 0 / 0;
+        }
+        case 142:
+        {
+          return 1 / 0;
+        }
+        case 143:
+        {
+          return -1 / 0;
+        }
+        case 144:
+        case 145:
+        case 146:
+        case 132:
+        case 133:
+        case 134:
+        case 135:
+        case 137:
+        case 138:
+        default:
+        {
+          return super.readValueOfType(type, buffer);
+        }
+      }
+    }
+  };
+  (firestore_message_codec.FirestoreMessageCodec.new = function() {
+    firestore_message_codec.FirestoreMessageCodec.__proto__.new.call(this);
+    ;
+  }).prototype = firestore_message_codec.FirestoreMessageCodec.prototype;
+  dart.addTypeTests(firestore_message_codec.FirestoreMessageCodec);
+  dart.addTypeCaches(firestore_message_codec.FirestoreMessageCodec);
+  dart.setMethodSignature(firestore_message_codec.FirestoreMessageCodec, () => ({
+    __proto__: dart.getMethods(firestore_message_codec.FirestoreMessageCodec.__proto__),
+    writeValue: dart.fnType(dart.void, [dart.legacy(serialization.WriteBuffer), dart.dynamic]),
+    readValueOfType: dart.fnType(dart.dynamic, [dart.legacy(core.int), dart.legacy(serialization.ReadBuffer)])
+  }));
+  dart.setLibraryUri(firestore_message_codec.FirestoreMessageCodec, I[14]);
+  dart.defineLazy(firestore_message_codec.FirestoreMessageCodec, {
+    /*firestore_message_codec.FirestoreMessageCodec._kDateTime*/get _kDateTime() {
+      return 128;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kGeoPoint*/get _kGeoPoint() {
+      return 129;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kDocumentReference*/get _kDocumentReference() {
+      return 130;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kBlob*/get _kBlob() {
+      return 131;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kArrayUnion*/get _kArrayUnion() {
+      return 132;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kArrayRemove*/get _kArrayRemove() {
+      return 133;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kDelete*/get _kDelete() {
+      return 134;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kServerTimestamp*/get _kServerTimestamp() {
+      return 135;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kTimestamp*/get _kTimestamp() {
+      return 136;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kIncrementDouble*/get _kIncrementDouble() {
+      return 137;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kIncrementInteger*/get _kIncrementInteger() {
+      return 138;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kDocumentId*/get _kDocumentId() {
+      return 139;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kFieldPath*/get _kFieldPath() {
+      return 140;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kNaN*/get _kNaN() {
+      return 141;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kInfinity*/get _kInfinity() {
+      return 142;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kNegativeInfinity*/get _kNegativeInfinity() {
+      return 143;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kFirestoreInstance*/get _kFirestoreInstance() {
+      return 144;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kFirestoreQuery*/get _kFirestoreQuery() {
+      return 145;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kFirestoreSettings*/get _kFirestoreSettings() {
+      return 146;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kFieldValueCodes*/get _kFieldValueCodes() {
+      return C[13] || CT.C13;
+    },
+    /*firestore_message_codec.FirestoreMessageCodec._kFieldPathCodes*/get _kFieldPathCodes() {
+      return C[14] || CT.C14;
+    }
+  }, true);
+  var _writes = dart.privateName(method_channel_write_batch, "_writes");
+  var _committed = dart.privateName(method_channel_write_batch, "_committed");
+  var _firestore$0 = dart.privateName(method_channel_write_batch, "_firestore");
+  var _assertNotCommitted = dart.privateName(method_channel_write_batch, "_assertNotCommitted");
+  method_channel_write_batch.MethodChannelWriteBatch = class MethodChannelWriteBatch extends platform_interface_write_batch.WriteBatchPlatform {
+    commit() {
+      return async.async(dart.void, (function* commit() {
+        this[_assertNotCommitted]();
+        this[_committed] = true;
+        if (dart.test(this[_writes][$isEmpty])) {
+          return;
+        }
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "WriteBatch#commit", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this[_firestore$0], "writes", this[_writes]]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    delete(documentPath) {
+      this[_assertNotCommitted]();
+      this[_writes][$add](new (T$.IdentityMapOfStringL$dynamic()).from(["path", documentPath, "type", "DELETE"]));
+    }
+    set(documentPath, data, options = null) {
+      let t1, t1$;
+      this[_assertNotCommitted]();
+      this[_writes][$add](new (T$.IdentityMapOfStringL$dynamic()).from(["path", documentPath, "type", "SET", "data", data, "options", new (T$.IdentityMapOfStringL$dynamic()).from(["merge", (t1 = options, t1 == null ? null : t1.merge), "mergeFields", (t1$ = options, t1$ == null ? null : t1$.mergeFields)])]));
+    }
+    update(documentPath, data) {
+      this[_assertNotCommitted]();
+      this[_writes][$add](new (T$.IdentityMapOfStringL$dynamic()).from(["path", documentPath, "type", "UPDATE", "data", data]));
+    }
+    [_assertNotCommitted]() {
+      if (dart.test(this[_committed])) {
+        dart.throw(new core.StateError.new("This batch has already been committed and can no longer be changed."));
+      }
+    }
+  };
+  (method_channel_write_batch.MethodChannelWriteBatch.new = function(_firestore) {
+    this[_writes] = T$.JSArrayOfMapLOfStringL$dynamic().of([]);
+    this[_committed] = false;
+    this[_firestore$0] = _firestore;
+    method_channel_write_batch.MethodChannelWriteBatch.__proto__.new.call(this);
+    ;
+  }).prototype = method_channel_write_batch.MethodChannelWriteBatch.prototype;
+  dart.addTypeTests(method_channel_write_batch.MethodChannelWriteBatch);
+  dart.addTypeCaches(method_channel_write_batch.MethodChannelWriteBatch);
+  dart.setMethodSignature(method_channel_write_batch.MethodChannelWriteBatch, () => ({
+    __proto__: dart.getMethods(method_channel_write_batch.MethodChannelWriteBatch.__proto__),
+    [_assertNotCommitted]: dart.fnType(dart.void, [])
+  }));
+  dart.setLibraryUri(method_channel_write_batch.MethodChannelWriteBatch, I[15]);
+  dart.setFieldSignature(method_channel_write_batch.MethodChannelWriteBatch, () => ({
+    __proto__: dart.getFields(method_channel_write_batch.MethodChannelWriteBatch.__proto__),
+    [_firestore$0]: dart.finalFieldType(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform)),
+    [_writes]: dart.fieldType(dart.legacy(core.List$(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))))),
+    [_committed]: dart.fieldType(dart.legacy(core.bool))
+  }));
+  var appName$ = dart.privateName(method_channel_transaction, "MethodChannelTransaction.appName");
+  var _firestore = dart.privateName(method_channel_transaction, "_firestore");
+  var _commands = dart.privateName(method_channel_transaction, "_commands");
+  var _transactionId = dart.privateName(method_channel_transaction, "_transactionId");
+  method_channel_transaction.MethodChannelTransaction = class MethodChannelTransaction extends platform_interface_transaction.TransactionPlatform {
+    get appName() {
+      return this[appName$];
+    }
+    set appName(value) {
+      super.appName = value;
+    }
+    get commands() {
+      return this[_commands];
+    }
+    get(documentPath) {
+      return async.async(T$.DocumentSnapshotPlatformL(), (function* get() {
+        if (!dart.test(this[_commands][$isEmpty])) dart.assertFailed("Transactions require all reads to be executed before all writes.", I[16], 42, 12, "_commands.isEmpty");
+        let result = (yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMapMethod(T$.StringL(), dart.dynamic, "Transaction#get", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this[_firestore], "transactionId", this[_transactionId], "reference", this[_firestore].doc(documentPath)])));
+        return new platform_interface_document_snapshot.DocumentSnapshotPlatform.new(this[_firestore], documentPath, T$.LinkedHashMapOfStringL$dynamic().from(result));
+      }).bind(this));
+    }
+    delete(documentPath) {
+      this[_commands][$add](new (T$.IdentityMapOfStringL$StringL()).from(["type", "DELETE", "path", documentPath]));
+      return this;
+    }
+    update(documentPath, data) {
+      this[_commands][$add](new (T$.IdentityMapOfStringL$dynamic()).from(["type", "UPDATE", "path", documentPath, "data", data]));
+      return this;
+    }
+    set(documentPath, data, options = null) {
+      let t1, t1$;
+      this[_commands][$add](new (T$.IdentityMapOfStringL$dynamic()).from(["type", "SET", "path", documentPath, "data", data, "options", new (T$.IdentityMapOfStringL$ObjectL()).from(["merge", (t1 = options, t1 == null ? null : t1.merge), "mergeFields", (t1$ = options, t1$ == null ? null : t1$.mergeFields)])]));
+      return this;
+    }
+  };
+  (method_channel_transaction.MethodChannelTransaction.new = function(transactionId, appName) {
+    this[_firestore] = null;
+    this[_commands] = T$.JSArrayOfMapLOfStringL$dynamic().of([]);
+    this[appName$] = appName;
+    this[_transactionId] = transactionId;
+    method_channel_transaction.MethodChannelTransaction.__proto__.new.call(this);
+    this[_firestore] = platform_interface_firestore.FirebaseFirestorePlatform.instanceFor({app: firebase_core.Firebase.app(this.appName)});
+  }).prototype = method_channel_transaction.MethodChannelTransaction.prototype;
+  dart.addTypeTests(method_channel_transaction.MethodChannelTransaction);
+  dart.addTypeCaches(method_channel_transaction.MethodChannelTransaction);
+  dart.setMethodSignature(method_channel_transaction.MethodChannelTransaction, () => ({
+    __proto__: dart.getMethods(method_channel_transaction.MethodChannelTransaction.__proto__),
+    delete: dart.fnType(dart.legacy(method_channel_transaction.MethodChannelTransaction), [dart.legacy(core.String)]),
+    update: dart.fnType(dart.legacy(method_channel_transaction.MethodChannelTransaction), [dart.legacy(core.String), dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))]),
+    set: dart.fnType(dart.legacy(method_channel_transaction.MethodChannelTransaction), [dart.legacy(core.String), dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))], [dart.legacy(set_options.SetOptions)])
+  }));
+  dart.setLibraryUri(method_channel_transaction.MethodChannelTransaction, I[17]);
+  dart.setFieldSignature(method_channel_transaction.MethodChannelTransaction, () => ({
+    __proto__: dart.getFields(method_channel_transaction.MethodChannelTransaction.__proto__),
+    appName: dart.finalFieldType(dart.legacy(core.String)),
+    [_transactionId]: dart.fieldType(dart.legacy(core.int)),
+    [_firestore]: dart.fieldType(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform)),
+    [_commands]: dart.fieldType(dart.legacy(core.List$(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic)))))
+  }));
+  method_channel_document_change.MethodChannelDocumentChange = class MethodChannelDocumentChange extends platform_interface_document_change.DocumentChangePlatform {};
+  (method_channel_document_change.MethodChannelDocumentChange.new = function(firestore, data) {
+    method_channel_document_change.MethodChannelDocumentChange.__proto__.new.call(this, platform_interface_document_change.DocumentChangeType.values[$firstWhere](dart.fn(type => core.identical(dart.toString(type), data[$_get]("type")), T$.DocumentChangeTypeLToboolL())), T$.intL().as(data[$_get]("oldIndex")), T$.intL().as(data[$_get]("newIndex")), new platform_interface_document_snapshot.DocumentSnapshotPlatform.new(firestore, T$.StringL().as(data[$_get]("path")), new (T$.IdentityMapOfStringL$dynamic()).from(["data", T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as(data[$_get]("data"))), "metadata", T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as(data[$_get]("metadata")))])));
+    ;
+  }).prototype = method_channel_document_change.MethodChannelDocumentChange.prototype;
+  dart.addTypeTests(method_channel_document_change.MethodChannelDocumentChange);
+  dart.addTypeCaches(method_channel_document_change.MethodChannelDocumentChange);
+  dart.setLibraryUri(method_channel_document_change.MethodChannelDocumentChange, I[18]);
+  method_channel_query_snapshot.MethodChannelQuerySnapshot = class MethodChannelQuerySnapshot extends platform_interface_query_snapshot.QuerySnapshotPlatform {};
+  (method_channel_query_snapshot.MethodChannelQuerySnapshot.new = function(firestore, data) {
+    method_channel_query_snapshot.MethodChannelQuerySnapshot.__proto__.new.call(this, T$.ListOfDocumentSnapshotPlatformL().generate(core.int.as(dart.dload(data[$_get]("documents"), 'length')), dart.fn(index => new platform_interface_document_snapshot.DocumentSnapshotPlatform.new(firestore, T$.StringL().as(dart.dsend(data[$_get]("paths"), '_get', [index])), new (T$.IdentityMapOfStringL$dynamic()).from(["data", T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as(dart.dsend(data[$_get]("documents"), '_get', [index]))), "metadata", new (T$.IdentityMapOfStringL$dynamic()).from(["isFromCache", dart.dsend(dart.dsend(data[$_get]("metadatas"), '_get', [index]), '_get', ["isFromCache"]), "hasPendingWrites", dart.dsend(dart.dsend(data[$_get]("metadatas"), '_get', [index]), '_get', ["hasPendingWrites"])])])), T$.intLToDocumentSnapshotPlatformL())), T$.ListOfDocumentChangePlatformL().generate(core.int.as(dart.dload(data[$_get]("documentChanges"), 'length')), dart.fn(index => new method_channel_document_change.MethodChannelDocumentChange.new(firestore, T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as(dart.dsend(data[$_get]("documentChanges"), '_get', [index])))), T$.intLToMethodChannelDocumentChangeL())), new snapshot_metadata.SnapshotMetadataPlatform.new(T$.boolL().as(dart.dsend(data[$_get]("metadata"), '_get', ["hasPendingWrites"])), T$.boolL().as(dart.dsend(data[$_get]("metadata"), '_get', ["isFromCache"]))));
+    ;
+  }).prototype = method_channel_query_snapshot.MethodChannelQuerySnapshot.prototype;
+  dart.addTypeTests(method_channel_query_snapshot.MethodChannelQuerySnapshot);
+  dart.addTypeCaches(method_channel_query_snapshot.MethodChannelQuerySnapshot);
+  dart.setLibraryUri(method_channel_query_snapshot.MethodChannelQuerySnapshot, I[19]);
+  var isCollectionGroupQuery$ = dart.privateName(method_channel_query, "MethodChannelQuery.isCollectionGroupQuery");
+  var _pointer$1 = dart.privateName(method_channel_query, "_pointer");
+  var _copyWithParameters = dart.privateName(method_channel_query, "_copyWithParameters");
+  method_channel_query.MethodChannelQuery = class MethodChannelQuery extends platform_interface_query.QueryPlatform {
+    get isCollectionGroupQuery() {
+      return this[isCollectionGroupQuery$];
+    }
+    set isCollectionGroupQuery(value) {
+      super.isCollectionGroupQuery = value;
+    }
+    get path() {
+      return this[_pointer$1].path;
+    }
+    [_copyWithParameters](parameters) {
+      let t1;
+      return new method_channel_query.MethodChannelQuery.new(this.firestore, this[_pointer$1].path, {isCollectionGroupQuery: this.isCollectionGroupQuery, parameters: T$.MapOfStringL$dynamic().unmodifiable((t1 = T$.LinkedHashMapOfStringL$dynamic().from(this.parameters), (() => {
+          t1[$addAll](parameters);
+          return t1;
+        })()))});
+    }
+    endAtDocument(orders, values) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["orderBy", orders, "endAt", values, "endBefore", null]));
+    }
+    endAt(fields) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["endAt", fields, "endBefore", null]));
+    }
+    endBeforeDocument(orders, values) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["orderBy", orders, "endAt", null, "endBefore", values]));
+    }
+    endBefore(fields) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["endAt", null, "endBefore", fields]));
+    }
+    get(options = null) {
+      return async.async(T$.QuerySnapshotPlatformL(), (function* get() {
+        try {
+          let data = (yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMapMethod(T$.StringL(), dart.dynamic, "Query#get", new (T$.IdentityMapOfStringL$dynamic()).from(["query", this, "firestore", this.firestore, "source", source.getSourceString(options.source)])));
+          return new method_channel_query_snapshot.MethodChannelQuerySnapshot.new(this.firestore, data);
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    limit(limit) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["limit", limit, "limitToLast", null]));
+    }
+    limitToLast(limit) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["limit", null, "limitToLast", limit]));
+    }
+    snapshots(opts) {
+      let includeMetadataChanges = opts && 'includeMetadataChanges' in opts ? opts.includeMetadataChanges : false;
+      if (!(includeMetadataChanges != null)) dart.assertFailed(null, I[20], 129, 12, "includeMetadataChanges != null");
+      let handle = method_channel_firestore.MethodChannelFirebaseFirestore.nextMethodChannelHandleId;
+      let onListenComplete = T$.CompleterOfvoid().new();
+      let controller = null;
+      controller = T$.StreamControllerOfQuerySnapshotPlatformL().broadcast({onListen: dart.fn(() => async.async(core.Null, (function*() {
+          method_channel_firestore.MethodChannelFirebaseFirestore.queryObservers[$_set](handle, controller);
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Query#addSnapshotListener", new (T$.IdentityMapOfStringL$dynamic()).from(["query", this, "handle", handle, "firestore", this.firestore, "includeMetadataChanges", includeMetadataChanges]));
+          if (!dart.test(onListenComplete.isCompleted)) {
+            onListenComplete.complete();
+          }
+        }).bind(this)), T$.VoidToFutureLOfNull()), onCancel: dart.fn(() => async.async(core.Null, function*() {
+          yield onListenComplete.future;
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#removeListener", new (T$.IdentityMapOfStringL$dynamic()).from(["handle", handle]));
+          method_channel_firestore.MethodChannelFirebaseFirestore.queryObservers[$remove](handle);
+        }), T$.VoidToFutureLOfNull())});
+      return controller.stream;
+    }
+    orderBy(orders) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["orderBy", orders]));
+    }
+    startAfterDocument(orders, values) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["orderBy", orders, "startAt", null, "startAfter", values]));
+    }
+    startAfter(fields) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["startAt", null, "startAfter", fields]));
+    }
+    startAtDocument(orders, values) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["orderBy", orders, "startAt", values, "startAfter", null]));
+    }
+    startAt(fields) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["startAt", fields, "startAfter", null]));
+    }
+    where(conditions) {
+      return this[_copyWithParameters](new (T$.IdentityMapOfStringL$dynamic()).from(["where", conditions]));
+    }
+  };
+  (method_channel_query.MethodChannelQuery.new = function(_firestore, path, opts) {
+    let parameters = opts && 'parameters' in opts ? opts.parameters : null;
+    let isCollectionGroupQuery = opts && 'isCollectionGroupQuery' in opts ? opts.isCollectionGroupQuery : false;
+    this[_pointer$1] = null;
+    this[isCollectionGroupQuery$] = isCollectionGroupQuery;
+    method_channel_query.MethodChannelQuery.__proto__.new.call(this, _firestore, parameters);
+    this[_pointer$1] = new pointer.Pointer.new(path);
+  }).prototype = method_channel_query.MethodChannelQuery.prototype;
+  dart.addTypeTests(method_channel_query.MethodChannelQuery);
+  dart.addTypeCaches(method_channel_query.MethodChannelQuery);
+  dart.setMethodSignature(method_channel_query.MethodChannelQuery, () => ({
+    __proto__: dart.getMethods(method_channel_query.MethodChannelQuery.__proto__),
+    [_copyWithParameters]: dart.fnType(dart.legacy(method_channel_query.MethodChannelQuery), [dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic))])
+  }));
+  dart.setGetterSignature(method_channel_query.MethodChannelQuery, () => ({
+    __proto__: dart.getGetters(method_channel_query.MethodChannelQuery.__proto__),
+    path: dart.legacy(core.String)
+  }));
+  dart.setLibraryUri(method_channel_query.MethodChannelQuery, I[21]);
+  dart.setFieldSignature(method_channel_query.MethodChannelQuery, () => ({
+    __proto__: dart.getFields(method_channel_query.MethodChannelQuery.__proto__),
+    isCollectionGroupQuery: dart.finalFieldType(dart.legacy(core.bool)),
+    [_pointer$1]: dart.fieldType(dart.legacy(pointer.Pointer))
+  }));
+  var _pointer$2 = dart.privateName(method_channel_document_reference, "_pointer");
+  var _name$1 = dart.privateName(source$, "_name");
+  var GetOptions_source = dart.privateName(get_options, "GetOptions.source");
+  method_channel_document_reference.MethodChannelDocumentReference = class MethodChannelDocumentReference extends platform_interface_document_reference.DocumentReferencePlatform {
+    set(data, options = null) {
+      return async.async(dart.void, (function* set() {
+        let t2, t2$;
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "DocumentReference#set", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this.firestore, "reference", this, "data", data, "options", new (T$.IdentityMapOfStringL$dynamic()).from(["merge", (t2 = options, t2 == null ? null : t2.merge), "mergeFields", (t2$ = options, t2$ == null ? null : t2$.mergeFields)])]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    update(data) {
+      return async.async(dart.void, (function* update() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "DocumentReference#update", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this.firestore, "reference", this, "data", data]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    get(options = C[16] || CT.C16) {
+      return async.async(T$.DocumentSnapshotPlatformL(), (function* get() {
+        try {
+          let data = (yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMapMethod(T$.StringL(), dart.dynamic, "DocumentReference#get", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this.firestore, "reference", this, "source", source.getSourceString(options.source)])));
+          return new platform_interface_document_snapshot.DocumentSnapshotPlatform.new(this.firestore, this[_pointer$2].path, data);
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    delete() {
+      return async.async(dart.void, (function* $delete() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "DocumentReference#delete", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this.firestore, "reference", this]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    snapshots(opts) {
+      let includeMetadataChanges = opts && 'includeMetadataChanges' in opts ? opts.includeMetadataChanges : false;
+      if (!(includeMetadataChanges != null)) dart.assertFailed(null, I[22], 99, 12, "includeMetadataChanges != null");
+      let handle = method_channel_firestore.MethodChannelFirebaseFirestore.nextMethodChannelHandleId;
+      let onListenComplete = T$.CompleterOfvoid().new();
+      let controller = null;
+      controller = T$.StreamControllerOfDocumentSnapshotPlatformL().broadcast({onListen: dart.fn(() => async.async(core.Null, (function*() {
+          method_channel_firestore.MethodChannelFirebaseFirestore.documentObservers[$_set](handle, controller);
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "DocumentReference#addSnapshotListener", new (T$.IdentityMapOfStringL$dynamic()).from(["handle", handle, "firestore", this.firestore, "reference", this, "includeMetadataChanges", includeMetadataChanges]));
+          if (!dart.test(onListenComplete.isCompleted)) {
+            onListenComplete.complete();
+          }
+        }).bind(this)), T$.VoidToFutureLOfNull()), onCancel: dart.fn(() => async.async(core.Null, function*() {
+          yield onListenComplete.future;
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#removeListener", new (T$.IdentityMapOfStringL$dynamic()).from(["handle", handle]));
+          method_channel_firestore.MethodChannelFirebaseFirestore.documentObservers[$remove](handle);
+        }), T$.VoidToFutureLOfNull())});
+      return controller.stream;
+    }
+  };
+  (method_channel_document_reference.MethodChannelDocumentReference.new = function(firestore, path) {
+    this[_pointer$2] = null;
+    if (!(firestore != null)) dart.assertFailed(null, I[22], 22, 16, "firestore != null");
+    method_channel_document_reference.MethodChannelDocumentReference.__proto__.new.call(this, firestore, path);
+    this[_pointer$2] = new pointer.Pointer.new(path);
+  }).prototype = method_channel_document_reference.MethodChannelDocumentReference.prototype;
+  dart.addTypeTests(method_channel_document_reference.MethodChannelDocumentReference);
+  dart.addTypeCaches(method_channel_document_reference.MethodChannelDocumentReference);
+  dart.setLibraryUri(method_channel_document_reference.MethodChannelDocumentReference, I[23]);
+  dart.setFieldSignature(method_channel_document_reference.MethodChannelDocumentReference, () => ({
+    __proto__: dart.getFields(method_channel_document_reference.MethodChannelDocumentReference.__proto__),
+    [_pointer$2]: dart.fieldType(dart.legacy(pointer.Pointer))
+  }));
+  var _pointer$3 = dart.privateName(method_channel_collection_reference, "MethodChannelCollectionReference._pointer");
+  var _pointer$4 = dart.privateName(method_channel_collection_reference, "_pointer");
+  method_channel_collection_reference.MethodChannelCollectionReference = class MethodChannelCollectionReference extends method_channel_query.MethodChannelQuery {
+    get [_pointer$4]() {
+      return this[_pointer$3];
+    }
+    set [_pointer$4](value) {
+      this[_pointer$3] = value;
+    }
+    get id() {
+      return this[_pointer$4].id;
+    }
+    get parent() {
+      let parentPath = this[_pointer$4].parentPath();
+      return parentPath == null ? null : new method_channel_document_reference.MethodChannelDocumentReference.new(this.firestore, parentPath);
+    }
+    get path() {
+      return this[_pointer$4].path;
+    }
+    doc(path = null) {
+      let documentPath = null;
+      if (path != null) {
+        documentPath = this[_pointer$4].documentPath(path);
+      } else {
+        let autoId = auto_id_generator.AutoIdGenerator.autoId();
+        documentPath = this[_pointer$4].documentPath(autoId);
+      }
+      return new method_channel_document_reference.MethodChannelDocumentReference.new(this.firestore, documentPath);
+    }
+    get [_pointer$0]() {
+      return T$.PointerL().as(this.noSuchMethod(new core._Invocation.getter(C[18] || CT.C18)));
+    }
+  };
+  (method_channel_collection_reference.MethodChannelCollectionReference.new = function(firestore, path) {
+    this[_pointer$3] = null;
+    method_channel_collection_reference.MethodChannelCollectionReference.__proto__.new.call(this, firestore, path);
+    this[_pointer$4] = new pointer.Pointer.new(path);
+  }).prototype = method_channel_collection_reference.MethodChannelCollectionReference.prototype;
+  dart.addTypeTests(method_channel_collection_reference.MethodChannelCollectionReference);
+  dart.addTypeCaches(method_channel_collection_reference.MethodChannelCollectionReference);
+  method_channel_collection_reference.MethodChannelCollectionReference[dart.implements] = () => [platform_interface_collection_reference.CollectionReferencePlatform];
+  dart.setMethodSignature(method_channel_collection_reference.MethodChannelCollectionReference, () => ({
+    __proto__: dart.getMethods(method_channel_collection_reference.MethodChannelCollectionReference.__proto__),
+    doc: dart.fnType(dart.legacy(platform_interface_document_reference.DocumentReferencePlatform), [], [dart.legacy(core.String)])
+  }));
+  dart.setGetterSignature(method_channel_collection_reference.MethodChannelCollectionReference, () => ({
+    __proto__: dart.getGetters(method_channel_collection_reference.MethodChannelCollectionReference.__proto__),
+    id: dart.legacy(core.String),
+    parent: dart.legacy(platform_interface_document_reference.DocumentReferencePlatform),
+    [_pointer$0]: dart.legacy(pointer.Pointer)
+  }));
+  dart.setLibraryUri(method_channel_collection_reference.MethodChannelCollectionReference, I[24]);
+  dart.setFieldSignature(method_channel_collection_reference.MethodChannelCollectionReference, () => ({
+    __proto__: dart.getFields(method_channel_collection_reference.MethodChannelCollectionReference.__proto__),
+    [_pointer$4]: dart.fieldType(dart.legacy(pointer.Pointer))
+  }));
+  var _settings = dart.privateName(method_channel_firestore, "_settings");
+  var _handleSnapshotsInSync = dart.privateName(method_channel_firestore, "_handleSnapshotsInSync");
+  var _handleQuerySnapshotEvent = dart.privateName(method_channel_firestore, "_handleQuerySnapshotEvent");
+  var _handleQuerySnapshotError = dart.privateName(method_channel_firestore, "_handleQuerySnapshotError");
+  var _handleDocumentSnapshotEvent = dart.privateName(method_channel_firestore, "_handleDocumentSnapshotEvent");
+  var _handleDocumentSnapshotError = dart.privateName(method_channel_firestore, "_handleDocumentSnapshotError");
+  var _handleTransactionAttempt = dart.privateName(method_channel_firestore, "_handleTransactionAttempt");
+  var _handleError = dart.privateName(method_channel_firestore, "_handleError");
+  var Duration__duration = dart.privateName(core, "Duration._duration");
+  var appInstance$ = dart.privateName(platform_interface_firestore, "FirebaseFirestorePlatform.appInstance");
+  platform_interface_firestore.FirebaseFirestorePlatform = class FirebaseFirestorePlatform extends plugin_platform_interface.PlatformInterface {
+    get appInstance() {
+      return this[appInstance$];
+    }
+    set appInstance(value) {
+      super.appInstance = value;
+    }
+    get app() {
+      if (this.appInstance == null) {
+        return firebase_core.Firebase.app();
+      }
+      return this.appInstance;
+    }
+    static instanceFor(opts) {
+      let app = opts && 'app' in opts ? opts.app : null;
+      return platform_interface_firestore.FirebaseFirestorePlatform.instance.delegateFor({app: app});
+    }
+    static get instance() {
+      if (platform_interface_firestore.FirebaseFirestorePlatform._instance == null) {
+        platform_interface_firestore.FirebaseFirestorePlatform._instance = new method_channel_firestore.MethodChannelFirebaseFirestore.new({app: firebase_core.Firebase.app()});
+      }
+      return platform_interface_firestore.FirebaseFirestorePlatform._instance;
+    }
+    static set instance(instance) {
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_firestore.FirebaseFirestorePlatform._token);
+      platform_interface_firestore.FirebaseFirestorePlatform._instance = instance;
+    }
+    delegateFor(opts) {
+      let app = opts && 'app' in opts ? opts.app : null;
+      dart.throw(new core.UnimplementedError.new("delegateFor() is not implemented"));
+    }
+    batch() {
+      dart.throw(new core.UnimplementedError.new("batch() is not implemented"));
+    }
+    clearPersistence() {
+      dart.throw(new core.UnimplementedError.new("clearPersistence() is not implemented"));
+    }
+    enablePersistence(persistenceSettings = null) {
+      return async.async(dart.void, function* enablePersistence() {
+        dart.throw(new core.UnimplementedError.new("enablePersistence() is not implemented"));
+      });
+    }
+    collection(collectionPath) {
+      dart.throw(new core.UnimplementedError.new("collection() is not implemented"));
+    }
+    collectionGroup(collectionPath) {
+      dart.throw(new core.UnimplementedError.new("collectionGroup() is not implemented"));
+    }
+    disableNetwork() {
+      dart.throw(new core.UnimplementedError.new("disableNetwork() is not implemented"));
+    }
+    doc(documentPath) {
+      dart.throw(new core.UnimplementedError.new("doc() is not implemented"));
+    }
+    enableNetwork() {
+      dart.throw(new core.UnimplementedError.new("enableNetwork() is not implemented"));
+    }
+    snapshotsInSync() {
+      dart.throw(new core.UnimplementedError.new("snapshotsInSync() is not implemented"));
+    }
+    runTransaction(T, transactionHandler, opts) {
+      let timeout = opts && 'timeout' in opts ? opts.timeout : C[19] || CT.C19;
+      dart.throw(new core.UnimplementedError.new("runTransaction() is not implemented"));
+    }
+    get settings() {
+      dart.throw(new core.UnimplementedError.new("settings getter is not implemented"));
+    }
+    set settings(settings) {
+      dart.throw(new core.UnimplementedError.new("settings setter is not implemented"));
+    }
+    terminate() {
+      dart.throw(new core.UnimplementedError.new("terminate() is not implemented"));
+    }
+    waitForPendingWrites() {
+      dart.throw(new core.UnimplementedError.new("waitForPendingWrites() is not implemented"));
+    }
+    _equals(o) {
+      if (o == null) return false;
+      return T$.FirebaseFirestorePlatformL().is(o) && o.app.name == this.app.name;
+    }
+    get hashCode() {
+      return dart.hashCode(this.toString());
+    }
+    toString() {
+      return dart.str(dart.wrapType(platform_interface_firestore.FirebaseFirestorePlatform)) + "(app: " + dart.str(this.app.name) + ")";
+    }
+  };
+  (platform_interface_firestore.FirebaseFirestorePlatform.new = function(opts) {
+    let appInstance = opts && 'appInstance' in opts ? opts.appInstance : null;
+    this[appInstance$] = appInstance;
+    platform_interface_firestore.FirebaseFirestorePlatform.__proto__.new.call(this, {token: platform_interface_firestore.FirebaseFirestorePlatform._token});
+    ;
+  }).prototype = platform_interface_firestore.FirebaseFirestorePlatform.prototype;
+  dart.addTypeTests(platform_interface_firestore.FirebaseFirestorePlatform);
+  dart.addTypeCaches(platform_interface_firestore.FirebaseFirestorePlatform);
+  dart.setMethodSignature(platform_interface_firestore.FirebaseFirestorePlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_firestore.FirebaseFirestorePlatform.__proto__),
+    delegateFor: dart.fnType(dart.legacy(platform_interface_firestore.FirebaseFirestorePlatform), [], {app: dart.legacy(firebase_core.FirebaseApp)}, {}),
+    batch: dart.fnType(dart.legacy(platform_interface_write_batch.WriteBatchPlatform), []),
+    clearPersistence: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    enablePersistence: dart.fnType(dart.legacy(async.Future$(dart.void)), [], [dart.legacy(persistence_settings.PersistenceSettings)]),
+    collection: dart.fnType(dart.legacy(platform_interface_collection_reference.CollectionReferencePlatform), [dart.legacy(core.String)]),
+    collectionGroup: dart.fnType(dart.legacy(platform_interface_query.QueryPlatform), [dart.legacy(core.String)]),
+    disableNetwork: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    doc: dart.fnType(dart.legacy(platform_interface_document_reference.DocumentReferencePlatform), [dart.legacy(core.String)]),
+    enableNetwork: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    snapshotsInSync: dart.fnType(dart.legacy(async.Stream$(dart.void)), []),
+    runTransaction: dart.gFnType(T => [dart.legacy(async.Future$(dart.legacy(T))), [dart.legacy(dart.fnType(dart.legacy(async.Future$(dart.legacy(T))), [dart.legacy(platform_interface_transaction.TransactionPlatform)]))], {timeout: dart.legacy(core.Duration)}, {}]),
+    terminate: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    waitForPendingWrites: dart.fnType(dart.legacy(async.Future$(dart.void)), []),
+    _equals: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    [$_equals]: dart.fnType(dart.legacy(core.bool), [dart.dynamic]),
+    toString: dart.fnType(dart.legacy(core.String), []),
+    [$toString]: dart.fnType(dart.legacy(core.String), [])
+  }));
+  dart.setGetterSignature(platform_interface_firestore.FirebaseFirestorePlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_firestore.FirebaseFirestorePlatform.__proto__),
+    app: dart.legacy(firebase_core.FirebaseApp),
+    settings: dart.legacy(settings.Settings),
+    hashCode: dart.legacy(core.int),
+    [$hashCode]: dart.legacy(core.int)
+  }));
+  dart.setSetterSignature(platform_interface_firestore.FirebaseFirestorePlatform, () => ({
+    __proto__: dart.getSetters(platform_interface_firestore.FirebaseFirestorePlatform.__proto__),
+    settings: dart.legacy(settings.Settings)
+  }));
+  dart.setLibraryUri(platform_interface_firestore.FirebaseFirestorePlatform, I[26]);
+  dart.setFieldSignature(platform_interface_firestore.FirebaseFirestorePlatform, () => ({
+    __proto__: dart.getFields(platform_interface_firestore.FirebaseFirestorePlatform.__proto__),
+    appInstance: dart.finalFieldType(dart.legacy(firebase_core.FirebaseApp))
+  }));
+  dart.defineExtensionMethods(platform_interface_firestore.FirebaseFirestorePlatform, ['_equals', 'toString']);
+  dart.defineExtensionAccessors(platform_interface_firestore.FirebaseFirestorePlatform, ['hashCode']);
+  dart.defineLazy(platform_interface_firestore.FirebaseFirestorePlatform, {
+    /*platform_interface_firestore.FirebaseFirestorePlatform._token*/get _token() {
+      return new core.Object.new();
+    },
+    /*platform_interface_firestore.FirebaseFirestorePlatform._instance*/get _instance() {
+      return null;
+    },
+    set _instance(_) {}
+  }, true);
+  method_channel_firestore.MethodChannelFirebaseFirestore = class MethodChannelFirebaseFirestore extends platform_interface_firestore.FirebaseFirestorePlatform {
+    static get nextMethodChannelHandleId() {
+      let t6;
+      t6 = method_channel_firestore.MethodChannelFirebaseFirestore._methodChannelHandleId;
+      method_channel_firestore.MethodChannelFirebaseFirestore._methodChannelHandleId = dart.notNull(t6) + 1;
+      return t6;
+    }
+    [_handleSnapshotsInSync]($arguments) {
+      return async.async(dart.void, function* _handleSnapshotsInSync() {
+        if (!dart.test(method_channel_firestore.MethodChannelFirebaseFirestore.snapshotInSyncObservers[$containsKey]($arguments[$_get]("handle")))) {
+          return;
+        }
+        method_channel_firestore.MethodChannelFirebaseFirestore.snapshotInSyncObservers[$_get]($arguments[$_get]("handle")).add(null);
+      });
+    }
+    [_handleQuerySnapshotEvent]($arguments) {
+      return async.async(dart.void, (function* _handleQuerySnapshotEvent() {
+        if (!dart.test(method_channel_firestore.MethodChannelFirebaseFirestore.queryObservers[$containsKey]($arguments[$_get]("handle")))) {
+          return;
+        }
+        try {
+          method_channel_firestore.MethodChannelFirebaseFirestore.queryObservers[$_get]($arguments[$_get]("handle")).add(new method_channel_query_snapshot.MethodChannelQuerySnapshot.new(this, T$.MapL().as($arguments[$_get]("snapshot"))));
+        } catch (e) {
+          let error = dart.getThrown(e);
+          this[_handleQuerySnapshotError](new _js_helper.LinkedMap.from(["handle", $arguments[$_get]("handle"), "error", error]));
+        }
+      }).bind(this));
+    }
+    [_handleQuerySnapshotError]($arguments) {
+      this[_handleError](method_channel_firestore.MethodChannelFirebaseFirestore.queryObservers[$_get]($arguments[$_get]("handle")), $arguments);
+    }
+    [_handleDocumentSnapshotEvent]($arguments) {
+      return async.async(dart.void, (function* _handleDocumentSnapshotEvent() {
+        if (!dart.test(method_channel_firestore.MethodChannelFirebaseFirestore.documentObservers[$containsKey]($arguments[$_get]("handle")))) {
+          return;
+        }
+        try {
+          let snapshotMap = T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as($arguments[$_get]("snapshot")));
+          let snapshot = new platform_interface_document_snapshot.DocumentSnapshotPlatform.new(this, T$.StringL().as(snapshotMap[$_get]("path")), new (T$.IdentityMapOfStringL$dynamic()).from(["data", snapshotMap[$_get]("data"), "metadata", snapshotMap[$_get]("metadata")]));
+          method_channel_firestore.MethodChannelFirebaseFirestore.documentObservers[$_get]($arguments[$_get]("handle")).add(snapshot);
+        } catch (e) {
+          let error = dart.getThrown(e);
+          this[_handleDocumentSnapshotError](new _js_helper.LinkedMap.from(["handle", $arguments[$_get]("handle"), "error", error]));
+        }
+      }).bind(this));
+    }
+    [_handleDocumentSnapshotError]($arguments) {
+      this[_handleError](method_channel_firestore.MethodChannelFirebaseFirestore.documentObservers[$_get]($arguments[$_get]("handle")), $arguments);
+    }
+    [_handleTransactionAttempt]($arguments) {
+      return async.async(T$.MapLOfStringL$dynamic(), function* _handleTransactionAttempt() {
+        let transactionId = T$.intL().as($arguments[$_get]("transactionId"));
+        let transaction = new method_channel_transaction.MethodChannelTransaction.new(transactionId, T$.StringL().as($arguments[$_get]("appName")));
+        let controller = method_channel_firestore.MethodChannelFirebaseFirestore._transactionStreamControllerHandlers[$_get](transactionId);
+        try {
+          let result = (yield method_channel_firestore.MethodChannelFirebaseFirestore._transactionHandlers[$_get](transactionId)(transaction));
+          controller.add(result);
+          return new (T$.IdentityMapOfStringL$dynamic()).from(["type", "SUCCESS", "commands", transaction.commands]);
+        } catch (e) {
+          let error = dart.getThrown(e);
+          controller.addError(error);
+          return new (T$.IdentityMapOfStringL$dynamic()).from(["type", "ERROR"]);
+        }
+      });
+    }
+    [_handleError](controller, $arguments) {
+      return async.async(dart.void, function* _handleError() {
+        if (controller == null) {
+          return;
+        }
+        if (T$.MapL().is($arguments[$_get]("error"))) {
+          let errorMap = T$.LinkedHashMapOfStringL$dynamic().from(core.Map.as($arguments[$_get]("error")));
+          let exception = new firebase_core_platform_interface.FirebaseException.new({plugin: "cloud_firestore", code: T$.StringL().as(errorMap[$_get]("code")), message: T$.StringL().as(errorMap[$_get]("message"))});
+          controller.addError(exception);
+        } else {
+          controller.addError($arguments[$_get]("error"));
+        }
+      });
+    }
+    delegateFor(opts) {
+      let app = opts && 'app' in opts ? opts.app : null;
+      return new method_channel_firestore.MethodChannelFirebaseFirestore.new({app: app});
+    }
+    batch() {
+      return new method_channel_write_batch.MethodChannelWriteBatch.new(this);
+    }
+    clearPersistence() {
+      return async.async(dart.void, (function* clearPersistence() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#clearPersistence", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    enablePersistence(persistenceSettings = null) {
+      return async.async(dart.void, function* enablePersistence() {
+        dart.throw(new core.UnimplementedError.new("enablePersistence() is only available for Web. Use [Settings.persistenceEnabled] for other platforms."));
+      });
+    }
+    collection(path) {
+      return new method_channel_collection_reference.MethodChannelCollectionReference.new(this, path);
+    }
+    collectionGroup(path) {
+      return new method_channel_query.MethodChannelQuery.new(this, path, {isCollectionGroupQuery: true});
+    }
+    disableNetwork() {
+      return async.async(dart.void, (function* disableNetwork() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#disableNetwork", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    doc(path) {
+      return new method_channel_document_reference.MethodChannelDocumentReference.new(this, path);
+    }
+    enableNetwork() {
+      return async.async(dart.void, (function* enableNetwork() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#enableNetwork", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    snapshotsInSync() {
+      let handle = method_channel_firestore.MethodChannelFirebaseFirestore.nextMethodChannelHandleId;
+      let controller = null;
+      controller = T$.StreamControllerOfQuerySnapshotPlatformL().broadcast({onListen: dart.fn(() => {
+          method_channel_firestore.MethodChannelFirebaseFirestore.snapshotInSyncObservers[$_set](handle, controller);
+          method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(T$.intL(), "Firestore#addSnapshotsInSyncListener", new (T$.IdentityMapOfStringL$dynamic()).from(["handle", handle, "firestore", this]));
+        }, T$.VoidToNull()), onCancel: dart.fn(() => async.async(core.Null, function*() {
+          method_channel_firestore.MethodChannelFirebaseFirestore.snapshotInSyncObservers[$remove](handle);
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#removeListener", new (T$.IdentityMapOfStringL$dynamic()).from(["handle", handle]));
+        }), T$.VoidToFutureLOfNull())});
+      return controller.stream;
+    }
+    runTransaction(T, transactionHandler, opts) {
+      let timeout = opts && 'timeout' in opts ? opts.timeout : C[19] || CT.C19;
+      return async.async(dart.legacy(T), (function* runTransaction() {
+        let t12;
+        if (!(dart.notNull(timeout.inMilliseconds) > 0)) dart.assertFailed("Transaction timeout must be more than 0 milliseconds", I[25], 336, 12, "timeout.inMilliseconds > 0");
+        let transactionId = (t12 = method_channel_firestore.MethodChannelFirebaseFirestore._transactionHandlerId, method_channel_firestore.MethodChannelFirebaseFirestore._transactionHandlerId = dart.notNull(t12) + 1, t12);
+        let streamController = async.StreamController.new();
+        method_channel_firestore.MethodChannelFirebaseFirestore._transactionHandlers[$_set](transactionId, transactionHandler);
+        method_channel_firestore.MethodChannelFirebaseFirestore._transactionStreamControllerHandlers[$_set](transactionId, streamController);
+        let result = null;
+        let exception = null;
+        let subscription = streamController.stream.listen(dart.fn(data => {
+          result = dart.legacy(T).as(data);
+        }, T$.ObjectLToNull()), {onError: dart.fn(e => {
+            exception = e;
+          }, T$.ObjectLToNull())});
+        yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.legacy(T), "Transaction#create", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this, "transactionId", transactionId, "timeout", timeout.inMilliseconds])).catchError(dart.fn(e => {
+          exception = e;
+        }, T$.ObjectLToNull()));
+        yield subscription.cancel();
+        method_channel_firestore.MethodChannelFirebaseFirestore._transactionStreamControllerHandlers[$remove](transactionId);
+        if (exception != null) {
+          if (T$.PlatformExceptionL().is(exception)) {
+            return async.Future$(dart.legacy(T)).error(exception$.platformExceptionToFirebaseException(T$.PlatformExceptionL().as(exception)));
+          } else {
+            return async.Future$(dart.legacy(T)).error(exception);
+          }
+        }
+        return result;
+      }).bind(this));
+    }
+    get settings() {
+      return this[_settings];
+    }
+    set settings(settings) {
+      this[_settings] = settings;
+    }
+    terminate() {
+      return async.async(dart.void, (function* terminate() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#terminate", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+    waitForPendingWrites() {
+      return async.async(dart.void, (function* waitForPendingWrites() {
+        try {
+          yield method_channel_firestore.MethodChannelFirebaseFirestore.channel.invokeMethod(dart.void, "Firestore#waitForPendingWrites", new (T$.IdentityMapOfStringL$dynamic()).from(["firestore", this]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          dart.throw(exception$.convertPlatformException(e));
+        }
+      }).bind(this));
+    }
+  };
+  (method_channel_firestore.MethodChannelFirebaseFirestore.new = function(opts) {
+    let app = opts && 'app' in opts ? opts.app : null;
+    this[_settings] = new settings.Settings.new();
+    method_channel_firestore.MethodChannelFirebaseFirestore.__proto__.new.call(this, {appInstance: app});
+    if (dart.test(method_channel_firestore.MethodChannelFirebaseFirestore._initialized)) return;
+    method_channel_firestore.MethodChannelFirebaseFirestore.channel.setMethodCallHandler(dart.fn(call => async.async(dart.void, (function*() {
+      switch (call.method) {
+        case "Firestore#snapshotsInSync":
+        {
+          return this[_handleSnapshotsInSync](T$.MapL().as(call.arguments));
+          break;
+        }
+        case "QuerySnapshot#event":
+        {
+          return this[_handleQuerySnapshotEvent](T$.MapL().as(call.arguments));
+          break;
+        }
+        case "QuerySnapshot#error":
+        {
+          return this[_handleQuerySnapshotError](T$.MapL().as(call.arguments));
+          break;
+        }
+        case "DocumentSnapshot#event":
+        {
+          return this[_handleDocumentSnapshotEvent](T$.MapL().as(call.arguments));
+          break;
+        }
+        case "DocumentSnapshot#error":
+        {
+          return this[_handleDocumentSnapshotError](T$.MapL().as(call.arguments));
+          break;
+        }
+        case "Transaction#attempt":
+        {
+          return this[_handleTransactionAttempt](T$.MapL().as(call.arguments));
+          break;
+        }
+        default:
+        {
+          dart.throw(new core.UnimplementedError.new(dart.str(call.method) + " has not been implemented"));
+        }
+      }
+    }).bind(this)), T$.MethodCallLToFutureLOfvoid()));
+    method_channel_firestore.MethodChannelFirebaseFirestore._initialized = true;
+  }).prototype = method_channel_firestore.MethodChannelFirebaseFirestore.prototype;
+  dart.addTypeTests(method_channel_firestore.MethodChannelFirebaseFirestore);
+  dart.addTypeCaches(method_channel_firestore.MethodChannelFirebaseFirestore);
+  dart.setMethodSignature(method_channel_firestore.MethodChannelFirebaseFirestore, () => ({
+    __proto__: dart.getMethods(method_channel_firestore.MethodChannelFirebaseFirestore.__proto__),
+    [_handleSnapshotsInSync]: dart.fnType(dart.void, [dart.legacy(core.Map)]),
+    [_handleQuerySnapshotEvent]: dart.fnType(dart.void, [dart.legacy(core.Map)]),
+    [_handleQuerySnapshotError]: dart.fnType(dart.void, [dart.legacy(core.Map)]),
+    [_handleDocumentSnapshotEvent]: dart.fnType(dart.void, [dart.legacy(core.Map)]),
+    [_handleDocumentSnapshotError]: dart.fnType(dart.void, [dart.legacy(core.Map)]),
+    [_handleTransactionAttempt]: dart.fnType(dart.legacy(async.Future$(dart.legacy(core.Map$(dart.legacy(core.String), dart.dynamic)))), [dart.legacy(core.Map)]),
+    [_handleError]: dart.fnType(dart.void, [dart.legacy(async.StreamController), dart.legacy(core.Map)]),
+    runTransaction: dart.gFnType(T => [dart.legacy(async.Future$(dart.legacy(T))), [dart.legacy(dart.fnType(dart.legacy(async.Future$(dart.legacy(T))), [dart.legacy(platform_interface_transaction.TransactionPlatform)]))], {timeout: dart.legacy(core.Duration)}, {}])
+  }));
+  dart.setLibraryUri(method_channel_firestore.MethodChannelFirebaseFirestore, I[27]);
+  dart.setFieldSignature(method_channel_firestore.MethodChannelFirebaseFirestore, () => ({
+    __proto__: dart.getFields(method_channel_firestore.MethodChannelFirebaseFirestore.__proto__),
+    [_settings]: dart.fieldType(dart.legacy(settings.Settings))
+  }));
+  dart.defineLazy(method_channel_firestore.MethodChannelFirebaseFirestore, {
+    /*method_channel_firestore.MethodChannelFirebaseFirestore._methodChannelHandleId*/get _methodChannelHandleId() {
+      return 0;
+    },
+    set _methodChannelHandleId(_) {},
+    /*method_channel_firestore.MethodChannelFirebaseFirestore._initialized*/get _initialized() {
+      return false;
+    },
+    set _initialized(_) {},
+    /*method_channel_firestore.MethodChannelFirebaseFirestore.channel*/get channel() {
+      return new platform_channel.MethodChannel.new("plugins.flutter.io/firebase_firestore", new message_codecs.StandardMethodCodec.new(new firestore_message_codec.FirestoreMessageCodec.new()));
+    },
+    set channel(_) {},
+    /*method_channel_firestore.MethodChannelFirebaseFirestore.queryObservers*/get queryObservers() {
+      return new (T$.IdentityMapOfintL$StreamControllerLOfQuerySnapshotPlatformL()).new();
+    },
+    /*method_channel_firestore.MethodChannelFirebaseFirestore.documentObservers*/get documentObservers() {
+      return new (T$.IdentityMapOfintL$StreamControllerLOfDocumentSnapshotPlatformL()).new();
+    },
+    /*method_channel_firestore.MethodChannelFirebaseFirestore.snapshotInSyncObservers*/get snapshotInSyncObservers() {
+      return new (T$.IdentityMapOfintL$StreamControllerLOfvoid()).new();
+    },
+    /*method_channel_firestore.MethodChannelFirebaseFirestore._transactionHandlers*/get _transactionHandlers() {
+      return new (T$.IdentityMapOfintL$TransactionPlatformLToLFutureL()).new();
+    },
+    /*method_channel_firestore.MethodChannelFirebaseFirestore._transactionStreamControllerHandlers*/get _transactionStreamControllerHandlers() {
+      return new (T$.IdentityMapOfintL$StreamControllerL()).new();
+    },
+    /*method_channel_firestore.MethodChannelFirebaseFirestore._transactionHandlerId*/get _transactionHandlerId() {
+      return 0;
+    },
+    set _transactionHandlerId(_) {}
+  }, true);
+  cloud_firestore_platform_interface.isValidCollectionPath = function isValidCollectionPath(collectionPath) {
+    return new pointer.Pointer.new(collectionPath).isCollection();
+  };
+  cloud_firestore_platform_interface.isValidDocumentPath = function isValidDocumentPath(documentPath) {
+    return new pointer.Pointer.new(documentPath).isDocument();
+  };
+  dart.trackLibraries("packages/cloud_firestore_platform_interface/src/platform_interface/platform_interface_write_batch.dart", {
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_write_batch.dart": platform_interface_write_batch,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_transaction.dart": platform_interface_transaction,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_query_snapshot.dart": platform_interface_query_snapshot,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_query.dart": platform_interface_query,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_field_value_factory.dart": method_channel_field_value_factory,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_field_value_factory.dart": platform_interface_field_value_factory,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_document_snapshot.dart": platform_interface_document_snapshot,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_document_reference.dart": platform_interface_document_reference,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_document_change.dart": platform_interface_document_change,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_collection_reference.dart": platform_interface_collection_reference,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_field_value.dart": method_channel_field_value,
+    "package:cloud_firestore_platform_interface/src/method_channel/utils/firestore_message_codec.dart": firestore_message_codec,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_write_batch.dart": method_channel_write_batch,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_transaction.dart": method_channel_transaction,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_document_change.dart": method_channel_document_change,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_query_snapshot.dart": method_channel_query_snapshot,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_query.dart": method_channel_query,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_document_reference.dart": method_channel_document_reference,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_collection_reference.dart": method_channel_collection_reference,
+    "package:cloud_firestore_platform_interface/src/method_channel/method_channel_firestore.dart": method_channel_firestore,
+    "package:cloud_firestore_platform_interface/src/platform_interface/platform_interface_firestore.dart": platform_interface_firestore,
+    "package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart": cloud_firestore_platform_interface
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["platform_interface_write_batch.dart","platform_interface_transaction.dart","platform_interface_query_snapshot.dart","platform_interface_query.dart","platform_interface_field_value_factory.dart","../method_channel/method_channel_field_value_factory.dart","platform_interface_document_snapshot.dart","platform_interface_document_reference.dart","platform_interface_document_change.dart","platform_interface_collection_reference.dart","../method_channel/method_channel_field_value.dart","../method_channel/utils/firestore_message_codec.dart","../method_channel/method_channel_write_batch.dart","../method_channel/method_channel_transaction.dart","../method_channel/method_channel_document_change.dart","../method_channel/method_channel_query_snapshot.dart","../method_channel/method_channel_query.dart","../method_channel/method_channel_document_reference.dart","../method_channel/method_channel_collection_reference.dart","platform_interface_firestore.dart","../method_channel/method_channel_firestore.dart","../../cloud_firestore_platform_interface.dart"],"names":[],"mappings":"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","file":"../../../../../../../../../packages/cloud_firestore_platform_interface/src/platform_interface/platform_interface_write_batch.dart.lib.js"}');
+  // Exports:
+  return {
+    src__platform_interface__platform_interface_write_batch: platform_interface_write_batch,
+    src__platform_interface__platform_interface_transaction: platform_interface_transaction,
+    src__platform_interface__platform_interface_query_snapshot: platform_interface_query_snapshot,
+    src__platform_interface__platform_interface_query: platform_interface_query,
+    src__method_channel__method_channel_field_value_factory: method_channel_field_value_factory,
+    src__platform_interface__platform_interface_field_value_factory: platform_interface_field_value_factory,
+    src__platform_interface__platform_interface_document_snapshot: platform_interface_document_snapshot,
+    src__platform_interface__platform_interface_document_reference: platform_interface_document_reference,
+    src__platform_interface__platform_interface_document_change: platform_interface_document_change,
+    src__platform_interface__platform_interface_collection_reference: platform_interface_collection_reference,
+    src__method_channel__method_channel_field_value: method_channel_field_value,
+    src__method_channel__utils__firestore_message_codec: firestore_message_codec,
+    src__method_channel__method_channel_write_batch: method_channel_write_batch,
+    src__method_channel__method_channel_transaction: method_channel_transaction,
+    src__method_channel__method_channel_document_change: method_channel_document_change,
+    src__method_channel__method_channel_query_snapshot: method_channel_query_snapshot,
+    src__method_channel__method_channel_query: method_channel_query,
+    src__method_channel__method_channel_document_reference: method_channel_document_reference,
+    src__method_channel__method_channel_collection_reference: method_channel_collection_reference,
+    src__method_channel__method_channel_firestore: method_channel_firestore,
+    src__platform_interface__platform_interface_firestore: platform_interface_firestore,
+    cloud_firestore_platform_interface: cloud_firestore_platform_interface
+  };
+}));
+
+//# sourceMappingURL=platform_interface_write_batch.dart.lib.js.map
