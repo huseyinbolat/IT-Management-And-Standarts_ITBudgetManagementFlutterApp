@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "471448902131",
+    "project_id": "fir-flutterlogin-a37c4",
+    "storage_bucket": "fir-flutterlogin-a37c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471448902131:android:c94493261a133cc2d75a86",
+        "android_client_info": {
+          "package_name": "com.bolat.login_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471448902131-bs8smqujhilg22k6m3sqffv8v5mi1a8f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bolat.login_firebase",
+            "certificate_hash": "817f90bbc63430f5ab683ef6fe913f41b034329a"
+          }
+        },
+        {
+          "client_id": "471448902131-0i88fegpgba8380k3fv95but63gd976t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCve5fH4IpnMuOvIyEeOQVHqCvo-1mPYSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471448902131-0i88fegpgba8380k3fv95but63gd976t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
